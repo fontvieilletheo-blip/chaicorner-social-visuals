@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CC-S02 · Reel — 5 salutations au soleil chaque matin</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<!--
+=====================================================================
+LÉGENDE (caption)
+=====================================================================
+Et si la journée commençait par cinq respirations conscientes plutôt que par le téléphone ? ☀️
+
+Les Salutations au Soleil — Sūrya Namaskāra — sont la porte d'entrée de presque toute pratique de yoga dynamique. Une séquence courte, où chaque mouvement épouse un souffle. C'est par elles que s'ouvre chaque cours d'Ashtanga au studio : on en fait 5 en version A pour réveiller le corps, puis quelques B pour aller plus loin.
+
+La bonne nouvelle ? Pas besoin d'être souple ou aguerri. Genoux au sol en Chaturanga, on marche au lieu de sauter, on remplace le chien tête en haut par un cobra bas si les épaules tirent. Ce sont des variations, pas des régressions. 🌿
+
+Le secret tient en quatre mots : un mouvement, un souffle. Si vous êtes essoufflé au bout de deux salutations, c'est souvent qu'on va trop vite. Ralentissez, revenez à l'ujjayi, ce souffle océanique qui sert de métronome. Et savourez les cinq respirations en chien tête en bas : c'est votre point de repos, pas une posture d'effort.
+
+Trois Salutations A suffisent pour démarrer. On ajoute progressivement.
+
+Et pour les apprendre vraiment bien ? Cinq minutes de correction directe valent dix heures de pratique solo. C'est tout l'intérêt de venir sur le tapis, ensemble. 🙏
+On vous attend, 12 cours Fauriel à Saint-Étienne.
+
+=====================================================================
+HASHTAGS
+=====================================================================
+#salutationausoleil #suryanamaskar #ashtangayoga #ashtanga #yogasaintetienne #saintetienne #yogaloire #yogamatin #yoga #yogafrance #yogapratique #pranayama #yogadebutant #studiodeyoga42
+-->
+</head>
+<body>
+
+<!-- ===== COUVERTURE / MINIATURE DU REEL (le hook) — format 9:16 ===== -->
+<div class="slide-label">Couverture Reel · format 9:16 · le hook</div>
+<section class="slide slide-story theme-brand bg-teal">
+  <p class="kicker">Reel · Routine matin</p>
+  <h1 class="title" style="color:var(--cream);">5 salutations<br>au soleil ☀️</h1>
+  <p class="lead" style="color:var(--cream);">Chaque matin. C'est tout ce qu'il faut pour commencer la journée.</p>
+  <p class="hand" style="color:var(--butter);margin-top:44px;">un mouvement, un souffle</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+  <!-- doodle soleil -->
+  <svg class="doodle doodle--tr" width="130" height="130" viewBox="0 0 24 24" fill="none" stroke="#f2c94c" stroke-width="1.5" stroke-linecap="round">
+    <circle cx="12" cy="12" r="4.5" fill="#f2c94c" stroke="none"/>
+    <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/>
+  </svg>
+</section>
+
+<!--
+=====================================================================
+SCRIPT COMPLET DU REEL (~25-35 s) — référence tournage
+=====================================================================
+
+HOOK (0-3 s)
+- Visuel : plan serré sur Agathe debout en Samasthiti, lumière du matin.
+- Texte écran : « 5 salutations au soleil ☀️ chaque matin »
+- Voix off : « C'est tout ce qu'il faut pour commencer la journée. »
+
+PLAN 1 (3-8 s) — Le départ
+- Rush : Agathe en Samasthiti, mains qui montent à l'inspir.
+- Texte écran : « Inspire → les bras montent »
+- Voix off : « Tout part du souffle. On inspire, les bras s'élèvent. »
+
+PLAN 2 (8-14 s) — La descente
+- Rush : flexion avant (Uttanasana) → dos plat → Chaturanga (genoux au sol, version accessible).
+- Texte écran : « Expire → on plie. Genoux au sol, c'est parfait 👌 »
+- Voix off : « On expire vers l'avant. Les genoux au sol, ce n'est pas tricher — c'est le bon alignement. »
+
+PLAN 3 (14-20 s) — Chien tête en haut / en bas
+- Rush : chien tête en haut (ou cobra bas) → chien tête en bas.
+- Texte écran : « Chien tête en bas = ton point de repos »
+- Voix off : « Chien tête en bas, cinq respirations. C'est ici qu'on respire. »
+
+PLAN 4 (20-26 s) — Le retour
+- Rush : saut/marche vers l'avant → pince → redressé bras en haut → Samasthiti.
+- Texte écran : « Un mouvement = un souffle 🌬️ »
+- Voix off : « Et on remonte. Un mouvement, un souffle. Voilà une salutation. »
+
+PLAN 5 (26-31 s) — La répétition
+- Rush : montage rapide (timelapse léger) de la salutation qui se répète × 5.
+- Texte écran : « × 5, et ta journée commence autrement »
+
+CTA (31-35 s)
+- Visuel : Agathe sourit face caméra, ou plan studio.
+- Texte écran : « On les travaille ensemble, en vrai 🙏 »
+- Voix off : « Envie de les apprendre bien ? Viens au studio. »
+- Sticker/handle : @chaicorner.ste
+
+RUSHES SUGGÉRÉS : utiliser les rushes d'Agathe déjà tournés (salutations au soleil).
+Lumière matinale chaude, un seul tapis, cadrage stable. Si A complète couverte, parfait ;
+sinon monter sur les segments existants.
+
+OUTRO : carte de fin crème avec logo « Chaï Corner — Yoga & Ayurvéda » + handle @chaicorner.ste.
+=====================================================================
+-->
+
+</body>
+</html>

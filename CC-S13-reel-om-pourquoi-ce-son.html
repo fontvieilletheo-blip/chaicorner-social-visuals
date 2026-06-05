@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CC-S13 · OM : pourquoi ce son ? · reel (couverture)</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<!--
+LÉGENDE :
+OM. C'est sans doute le son le plus universel du yoga… et le plus mal compris. On le chante en début de cours, on le voit imprimé sur des t-shirts, sans toujours savoir ce qu'il porte. 🕉️
+
+Pourtant, OM n'est pas un son unique : c'est trois sons fondus en un, suivis d'un quatrième que presque personne n'écoute.
+
+➝ A, bouche grande ouverte, qui vibre dans la poitrine — le commencement.
+➝ U, lèvres arrondies, qui glisse dans la gorge — le maintien.
+➝ M, lèvres fermées, vibration nasale jusqu'au sommet du crâne — la dissolution. C'est le son qu'on allonge le plus.
+➝ Et juste après, le silence : le quatrième « son », le plus précieux, celui où l'effet se révèle.
+
+Ce n'est pas qu'une jolie tradition. Chanter OM stimule le nerf vague, apaise le système nerveux et calme le flot des pensées — c'est pour ça qu'on l'utilise pour faire la transition entre la vie du dehors et l'espace de la pratique.
+
+Notre conseil pour la rentrée : 3 OM le matin, assis dans votre lit. Sans chercher à « bien » chanter. Et surtout, restez dans le silence qui suit. 🌿
+
+Tout comprendre sur OM (origine, prononciation, bienfaits) : article complet en lien dans la bio. Et pour le chanter en groupe, la vibration est tout autre — on vous attend au studio. 🙏
+
+— d'après l'article de Livia Leccia, référente chant védique au Chaï Corner.
+
+HASHTAGS :
+#chaicorner #yogasaintetienne #saintetienne #yogaloire #studiodeyoga42 #om #aum #mantra #chantvedique #sanskrit #meditation #ashtangayoga #yogatraditionnel #yoga #yogafrance
+
+============================================================
+SCRIPT REEL (référence tournage · vertical 9:16 · ~40 s · rythme lent)
+============================================================
+
+PLAN 1 — HOOK (0-3 s)
+  Visuel : gros plan visage de Livia, yeux fermés, qui chante un OM long. Le son est le tout premier audio (pas de musique encore).
+  Texte écran : « Vous l'avez déjà chanté… sans savoir pourquoi. »
+
+PLAN 2 — LA PROMESSE (3-7 s)
+  Voix off (Livia) : « OM, ce n'est pas un seul son. C'en est trois — plus un quatrième que personne n'écoute. »
+  Texte écran : A · U · M · (silence)
+
+PLAN 3 — LE A (7-13 s)
+  Visuel : Livia, bouche grande ouverte ; main sur la poitrine/ventre.
+  Voix off : « Le A. Bouche grande ouverte, le son vient du fond. Il vibre ici, dans la poitrine. Le commencement. »
+  Texte écran : A — le commencement · poitrine
+
+PLAN 4 — LE U (13-19 s)
+  Visuel : lèvres qui s'arrondissent ; main qui remonte vers la gorge.
+  Voix off : « Le U. Les lèvres s'arrondissent, le son glisse vers l'avant. Il vibre dans la gorge. Le maintien. »
+  Texte écran : U — le maintien · gorge
+
+PLAN 5 — LE M (19-25 s)
+  Visuel : lèvres fermées, vibration nasale ; main au sommet du crâne.
+  Voix off : « Le M. Lèvres fermées, vibration nasale. Il monte jusqu'au sommet du crâne. La dissolution. C'est le son le plus long. »
+  Texte écran : M — la dissolution · crâne
+
+PLAN 6 — LE SILENCE (25-31 s)
+  Visuel : Livia immobile, silencieuse, visage apaisé. Audio : silence total quelques secondes.
+  Voix off (après le silence, plus bas) : « Et juste après, le silence. C'est lui le quatrième son d'OM — le plus important. »
+  Texte écran : … le 4e son, c'est le silence.
+
+PLAN 7 — POURQUOI ÇA MARCHE (31-37 s)
+  Visuel : retour plan large, Livia en posture assise, dos droit.
+  Voix off : « Chanter OM apaise le système nerveux et calme le mental. C'est pour ça qu'on l'utilise pour entrer dans la pratique. »
+  Texte écran : apaise le mental · prépare la pratique
+
+PLAN 8 — CTA (37-42 s)
+  Visuel : Livia ouvre les yeux, léger sourire vers la caméra.
+  Voix off : « Essayez. Trois OM, ce matin. Et écoutez le silence après. »
+  Texte écran : 3 OM ce matin 🙏 · Tout comprendre → lien en bio · @chaicorner.ste
+
+RUSHES : Livia (prononciation sanskrit / mantras / chant védique). Le son du OM doit être réel (capté), pas synthétique. Sous-titres intégrés obligatoires.
+-->
+</head>
+<body>
+
+<!-- REEL — COUVERTURE / MINIATURE (format 9:16) · le hook en gros -->
+<div class="slide-label">CC-S13 · Couverture reel (miniature 9:16) · fond sarcelle</div>
+<section class="slide slide-story theme-brand bg-teal">
+  <p class="kicker" style="text-align:center;">Chant védique 🕉️</p>
+  <h1 class="title" style="text-align:center;font-size:108px;">OM</h1>
+  <p class="lead" style="color:var(--cream);text-align:center;font-size:40px;margin-top:8px;">3 sons cachés<br>dans 1 syllabe.</p>
+
+  <!-- A · U · M · silence -->
+  <div style="display:flex;justify-content:center;align-items:baseline;gap:28px;margin-top:64px;font-family:var(--serif);">
+    <span style="font-size:96px;font-weight:700;color:var(--butter);">A</span>
+    <span style="font-size:96px;font-weight:700;color:var(--butter);">U</span>
+    <span style="font-size:96px;font-weight:700;color:var(--butter);">M</span>
+    <span class="hand" style="color:var(--terracotta-soft);font-size:56px;align-self:center;">+ silence</span>
+  </div>
+
+  <p class="hand" style="color:var(--butter);text-align:center;margin-top:72px;font-size:58px;">vous l'avez déjà chanté…</p>
+
+  <div class="brand-footer" style="color:var(--cream);left:0;right:0;text-align:center;">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+
+  <!-- symbole OM discret en filigrane d'angle -->
+  <div class="doodle doodle--bl" style="font-family:var(--serif);font-size:160px;color:var(--cream);opacity:0.08;line-height:1;">ॐ</div>
+</section>
+
+</body>
+</html>

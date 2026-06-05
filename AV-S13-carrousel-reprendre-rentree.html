@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>AV-S13 · Carrousel — Reprendre à la rentrée</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+
+<!-- ============================================================
+     LÉGENDE (caption)
+     ============================================================
+Chaque année, c'est la même chose à la rentrée. Mon téléphone se remplit de messages qui commencent tous pareil : « Agathe, j'aimerais reprendre, mais… »
+
+Mais j'ai tout perdu cet été. Mais je n'ai plus le temps. Mais je ne sais plus par où commencer.
+
+Alors je vais vous dire ce que je leur réponds.
+
+La rentrée n'est pas un examen de rattrapage. Vous n'avez rien à "rattraper". Le yoga n'est pas une compétition contre la personne que vous étiez en juin. C'est une page blanche : on repart d'où on est aujourd'hui.
+
+Et la clé, ce n'est pas l'ambition. C'est la régularité. Je le vois depuis des années : ce sont les pratiquants modestes mais constants qui se transforment, pas ceux qui veulent tout, tout de suite, et s'épuisent en trois semaines.
+
+Les bienfaits, eux, viennent par étapes. L'apaisement dès le premier cours. Le corps qui se délie après un mois. Et, vers deux ou trois mois, ce moment où la pratique "prend" — où elle devient un besoin, plus un effort.
+
+Cette rentrée, ne cherchez pas à être parfait. Cherchez à être régulier.
+
+J'ai écrit un guide complet et honnête sur les bienfaits du yoga — ce qu'il fait vraiment, et ce qu'il ne fait pas. Lien en bio. Et si vous voulez être accompagné : le studio à Saint-Étienne (petit groupe, 8 max) ou mes cours en ligne, où que vous soyez. 🍂
+
+Dites-moi en commentaire : c'est quoi votre intention de rentrée ?
+
+     ------------------------------------------------------------
+     HASHTAGS
+     ------------------------------------------------------------
+#yoga #bienfaitsduyoga #rentree #yogasaintetienne #saintetienne #yogaloire #ashtangayoga #ashtanga #yogaenligne #yogadebutant #regularite #bienetre #yogafrance #chaicorner
+     ============================================================ -->
+</head>
+<body>
+
+<!-- ============ SLIDE 1 — COUVERTURE (rentrée, fond sarcelle) ============ -->
+<div class="slide-label">Slide 1 · Couverture · fond sarcelle</div>
+<section class="slide theme-agathe bg-teal">
+  <div class="slide-num">1</div>
+  <p class="kicker">Rentrée · pratique régulière</p>
+  <h1 class="title">Reprendre<br>à la rentrée</h1>
+  <p class="lead" style="color:var(--cream);">Réinstaller une pratique qui dure.</p>
+  <p class="hand" style="color:var(--butter);margin-top:44px;">5 clés pour ne pas lâcher en octobre →</p>
+  <div class="brand-footer" style="color:var(--cream);">Agathe Veillith <span class="at" style="color:var(--cream);opacity:.85;">@agatheveillith</span></div>
+  <!-- doodle feuille d'automne -->
+  <svg class="doodle doodle--tr" width="118" height="118" viewBox="0 0 24 24" fill="none">
+    <path d="M12 3c3.5 2 6 5 6 9 0 4-3 7-6 8-3-1-6-4-6-8 0-4 2.5-7 6-9z" fill="#c0673f"/>
+    <path d="M12 6v12" stroke="#fdf9f1" stroke-width="1.2" opacity="0.6"/>
+  </svg>
+</section>
+
+<!-- ============ SLIDE 2 — Déculpabiliser ============ -->
+<div class="slide-label">Slide 2 · Déculpabiliser · crème</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">2</div>
+  <h2 class="title">D'abord :<br>pas de culpabilité.</h2>
+  <p class="body">Vous avez lâché cet été ? Normal. La rentrée n'est pas une punition à rattraper. C'est une page blanche. <strong>On repart d'où on est, pas d'où on aurait "dû" être.</strong></p>
+</section>
+
+<!-- ============ SLIDE 3 — Clé n°1 (gros chiffre terracotta) ============ -->
+<div class="slide-label">Slide 3 · Clé 1 · crème</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">3</div>
+  <p class="kicker" style="font-size:120px;letter-spacing:0;line-height:1;color:var(--terracotta);font-family:var(--serif);font-weight:700;margin-bottom:8px;">1</p>
+  <h2 class="title">Visez la régularité,<br>pas la performance.</h2>
+  <p class="body">Deux ou trois pratiques courtes par semaine valent infiniment mieux qu'une longue séance occasionnelle. Une séance par mois ne change rien. <strong>C'est la répétition — même brève — qui transforme.</strong></p>
+</section>
+
+<!-- ============ SLIDE 4 — Clé n°2 ============ -->
+<div class="slide-label">Slide 4 · Clé 2 · crème</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">4</div>
+  <p class="kicker" style="font-size:120px;letter-spacing:0;line-height:1;color:var(--terracotta);font-family:var(--serif);font-weight:700;margin-bottom:8px;">2</p>
+  <h2 class="title">Choisissez<br>un créneau fixe.</h2>
+  <p class="body">Le matin est idéal : corps disponible, mental encore calme. Mais le meilleur moment reste celui que vous tiendrez vraiment. <strong>La régularité de l'horaire crée la régularité de la pratique.</strong></p>
+</section>
+
+<!-- ============ SLIDE 5 — Clé n°3 (fond sauge) ============ -->
+<div class="slide-label">Slide 5 · Clé 3 · fond sauge</div>
+<section class="slide theme-agathe bg-sage">
+  <div class="slide-num">5</div>
+  <p class="kicker" style="font-size:120px;letter-spacing:0;line-height:1;color:var(--cream);font-family:var(--serif);font-weight:700;margin-bottom:8px;">3</p>
+  <h2 class="title">Patience : les bienfaits<br>s'installent par étapes.</h2>
+  <ul class="points">
+    <li><strong>Dès la 1re séance :</strong> apaisement, meilleur sommeil.</li>
+    <li><strong>Après 3-4 semaines :</strong> moins de raideur, souffle plus ample.</li>
+    <li><strong>Après 2-3 mois :</strong> c'est là que le yoga "prend" vraiment.</li>
+  </ul>
+</section>
+
+<!-- ============ SLIDE 6 — Clés n°4 & 5 (fond terracotta) ============ -->
+<div class="slide-label">Slide 6 · Clés 4 &amp; 5 · fond terracotta</div>
+<section class="slide theme-agathe bg-terracotta">
+  <div class="slide-num">6</div>
+  <p class="kicker" style="color:var(--butter);">Clés 4 &amp; 5</p>
+  <h2 class="title">Faites-vous<br>accompagner.<br>Et soyez doux.</h2>
+  <p class="body" style="color:var(--cream);">Un enseignant qui corrige votre alignement dès le départ vous évite des semaines de mauvaises habitudes. Et rappelez-vous : <strong>le seul progrès qui compte, c'est le vôtre, comparé à vous d'hier.</strong></p>
+</section>
+
+<!-- ============ SLIDE 7 — CTA (fond sarcelle, double porte d'entrée) ============ -->
+<div class="slide-label">Slide 7 · CTA · fond sarcelle</div>
+<section class="slide theme-agathe bg-teal">
+  <div class="slide-num">7</div>
+  <h2 class="title">Et si cette rentrée<br>était la bonne ?</h2>
+  <p class="lead" style="color:var(--cream);">Au Chaï Corner, on reprend en petit groupe (8 max) à Saint-Étienne. Et où que vous soyez, mes cours en ligne vous accompagnent. Guide complet des bienfaits du yoga en bio.</p>
+  <span class="cta-pill">Studio + cours en ligne en bio</span>
+  <p class="hand" style="color:var(--butter);margin-top:36px;">— Agathe 🍂</p>
+  <div class="brand-footer" style="color:var(--cream);">Agathe Veillith <span class="at" style="color:var(--cream);opacity:.85;">@agatheveillith</span></div>
+</section>
+
+</body>
+</html>

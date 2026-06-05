@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CC-S10 · Mieux dormir, même en été · carrousel</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<!--
+LÉGENDE :
+L'été, on dort souvent moins bien. Les journées s'étirent, la chaleur s'installe dans la chambre, et le soir, le corps a beau être fatigué, le mental, lui, continue de tourner. 🌙
+
+Bonne nouvelle : une courte pratique du soir peut vraiment changer vos nuits. Pas n'importe laquelle — une séance dynamique comme l'Ashtanga réveille (gardez-la pour le matin !). Le soir, on choisit l'inverse : lent, doux, au sol, des postures tenues longtemps, sans effort.
+
+Avant même les postures, c'est la respiration qui fait le plus gros du travail. Le principe est simple et puissant : une expiration plus longue que l'inspiration (inspirez sur 4, expirez sur 6). Ce petit geste suffit à dire au corps qu'il peut enfin se relâcher.
+
+Dans le carrousel, on vous partage les postures clés — dont la fameuse « jambes au mur », parfaite quand l'été vous laisse les jambes lourdes. La séquence complète, 6 postures pour 15 minutes, est détaillée sur le blog.
+
+Et rappelez-vous : le yoga du soir aide pour les nuits agitées par le stress ou les tensions. En cas d'insomnie qui dure, parlez-en à un médecin — le yoga sera alors un beau complément, pas une solution unique. 🙏
+
+Lien en bio pour la séquence détaillée. Faites de beaux rêves.
+
+HASHTAGS :
+#chaicorner #yogasaintetienne #saintetienne #yogaloire #studiodeyoga42 #yogadoux #yogadusoir #yogasommeil #pranayama #yogatraditionnel #yoga #yogafrance #bienetre #meditation
+-->
+</head>
+<body>
+
+<!-- SLIDE 1 — COUVERTURE -->
+<div class="slide-label">Slide 1 · Couverture · fond sarcelle (nuit)</div>
+<section class="slide theme-brand bg-teal">
+  <div class="slide-num">1/8</div>
+  <p class="kicker">Yoga du soir 🌙</p>
+  <h1 class="title">Mieux dormir,<br>même en été.</h1>
+  <p class="lead" style="color:var(--cream);">6 postures pour des nuits plus douces, quand la chaleur s'invite.</p>
+  <p class="hand" style="color:var(--butter);margin-top:44px;">on respire →</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+  <!-- doodles lune + étoiles -->
+  <svg class="doodle doodle--tr" width="130" height="130" viewBox="0 0 24 24" fill="none">
+    <path d="M21 12.8A8 8 0 1 1 11.2 3a6.2 6.2 0 0 0 9.8 9.8z" fill="#f2c94c"/>
+    <circle cx="5.5" cy="6" r="1" fill="#fdf9f1"/>
+    <circle cx="8" cy="3.5" r="0.7" fill="#fdf9f1"/>
+  </svg>
+</section>
+
+<!-- SLIDE 2 — Le vrai problème du soir -->
+<div class="slide-label">Slide 2 · Concept · fond crème</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">2/8</div>
+  <h2 class="title">Le vrai<br>problème du soir</h2>
+  <p class="body">Ce n'est pas la fatigue qui manque, c'est <strong>l'activation</strong>. Le mental reste en mode « jour ». L'été, la chaleur ajoute encore de l'agitation.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 3 — La clé : allonger l'expiration -->
+<div class="slide-label">Slide 3 · Respiration · fond sauge</div>
+<section class="slide theme-brand bg-sage">
+  <div class="slide-num">3/8</div>
+  <h2 class="title">La clé : allonger<br>l'expiration</h2>
+  <p class="body" style="color:var(--teal-deep);">Inspirez sur <strong>4 temps</strong>, expirez sur <strong>6</strong>. Une expiration plus longue que l'inspiration bascule le corps vers le repos. 2 à 3 minutes suffisent.</p>
+  <p class="hand" style="color:var(--teal-deep);margin-top:36px;">inspire 4 · expire 6</p>
+  <div class="brand-footer" style="color:var(--teal-deep);">Chaï Corner <span class="at" style="color:var(--teal-deep);opacity:.7;">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 4 — Attention au yoga du soir -->
+<div class="slide-label">Slide 4 · Mise en garde · fond crème</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">4/8</div>
+  <h2 class="title">Attention au<br>yoga du soir</h2>
+  <p class="body">Toutes les pratiques n'endorment pas. Une séance dynamique réveille. Le soir, on choisit <strong>lent, doux, au sol, tenu longtemps</strong>.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 5 — Jambes au mur (photo posture) -->
+<div class="slide-label">Slide 5 · Posture 1 · photo + overlay</div>
+<section class="slide theme-brand">
+  <div class="slide-num" style="color:var(--cream);opacity:.6;z-index:2;">5/8</div>
+  <div class="photo-ph"><span>📷 ILLUSTRATION : silhouette trait fin terracotta — jambes au mur (Viparīta Karaṇī), dos au sol, jambes à la verticale contre le mur</span></div>
+  <div class="photo-overlay">
+    <p class="kicker" style="color:var(--butter);">Posture reine du soir</p>
+    <h2 class="title" style="color:var(--cream);">Jambes au mur</h2>
+    <p class="body" style="color:var(--cream);font-style:italic;margin-bottom:10px;">Viparīta Karaṇī</p>
+    <p class="body" style="color:var(--cream);">Allongez le dos, montez les jambes contre le mur. Décongestionne les jambes lourdes de l'été et calme le système nerveux.</p>
+  </div>
+</section>
+
+<!-- SLIDE 6 — Papillon allongé (photo posture) -->
+<div class="slide-label">Slide 6 · Posture 2 · photo + overlay</div>
+<section class="slide theme-brand">
+  <div class="slide-num" style="color:var(--cream);opacity:.6;z-index:2;">6/8</div>
+  <div class="photo-ph"><span>📷 ILLUSTRATION : silhouette trait fin terracotta — papillon allongé (Supta Baddha Koṇāsana), plantes des pieds jointes, genoux ouverts, mains ventre + cœur</span></div>
+  <div class="photo-overlay">
+    <p class="kicker" style="color:var(--butter);">Relâchement total</p>
+    <h2 class="title" style="color:var(--cream);">Papillon allongé</h2>
+    <p class="body" style="color:var(--cream);font-style:italic;margin-bottom:10px;">Supta Baddha Koṇāsana</p>
+    <p class="body" style="color:var(--cream);">Sur le dos, plantes des pieds l'une contre l'autre, genoux ouverts. Une main sur le ventre, une sur le cœur.</p>
+  </div>
+</section>
+
+<!-- SLIDE 7 — Le réflexe été -->
+<div class="slide-label">Slide 7 · Conseil · fond crème</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">7/8</div>
+  <h2 class="title">Le réflexe<br>été 🌿</h2>
+  <p class="body">Coupez les écrans, baissez les lumières, gardez la pièce fraîche. La pénombre prépare la <strong>mélatonine</strong>. Le yoga fait le reste.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 8 — CTA -->
+<div class="slide-label">Slide 8 · CTA · fond sarcelle (nuit)</div>
+<section class="slide theme-brand bg-teal">
+  <div class="slide-num">8/8</div>
+  <h2 class="title">La séquence<br>complète.</h2>
+  <p class="lead" style="color:var(--cream);">6 postures, 15 minutes — détaillées sur le blog. Faites de beaux rêves. 🔗</p>
+  <span class="cta-pill">Lire sur le blog</span>
+  <p class="hand" style="color:var(--butter);margin-top:40px;">bonne nuit ✦</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+</section>
+
+</body>
+</html>

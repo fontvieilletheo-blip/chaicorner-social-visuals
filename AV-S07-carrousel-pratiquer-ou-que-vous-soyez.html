@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>AV-S07 — Bientôt, pratiquer où que vous soyez · @agatheveillith</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<!--
+  ====== LÉGENDE (caption) ======
+  "Agathe, je déménage." "Je suis trop loin." "Mes horaires ont changé, je ne peux plus venir au studio."
+
+  J'entends ces phrases régulièrement. Et à chaque fois, ça me serre un peu le cœur. Parce qu'au Chaï Corner, j'ai fait le choix des petits groupes — 8 personnes maximum — pour pouvoir vraiment accompagner chacun·e. Mais ce choix a une contrepartie : je ne peux pas être partout, ni suivre tout le monde.
+
+  Pendant longtemps, je n'avais pas de réponse à donner à celles et ceux qui partaient. Alors j'ai cherché un autre chemin. Et j'ai fini par le trouver.
+
+  Bientôt, vous pourrez pratiquer avec moi où que vous soyez. Pas une version au rabais, pas un cours générique — la même exigence, le même soin, la même progression que ce que je transmets ici, dans la lignée que j'ai apprise à Mysore. Mais accessible, à votre rythme, depuis votre propre tapis.
+
+  Pour mes élèves qui déménagent. Pour celles et ceux qui sont loin de Saint-Étienne. Pour les matins où venir est impossible. Et pour les curieux·ses qui n'ont jamais osé franchir la porte d'un studio.
+
+  Je ne vous dévoile pas encore tout — patience 😊. Mais c'est pour très bientôt. Activez la cloche 🔔 pour être parmi les premier·ères prévenu·es.
+
+  Dites-moi en commentaire : ça vous parle ? 👇
+
+  ====== HASHTAGS ======
+  #yogaenligne #pratiquerchezsoi #bientot #ashtangayoga #ashtanga #mysorestyle #yogatraditionnel #yogasaintetienne #saintetienne #yogaloire #yoga #yogafrance #pratiquedeyoga #yogapourtous
+
+  NOTE conformité : ne PAS afficher prix, format précis ni date exacte (réservés au lancement S8). Post de désir.
+-->
+</head>
+<body>
+
+<!-- ============ SLIDE 1 — COUVERTURE (photo + overlay) ============ -->
+<div class="slide-label">AV-S07 · Slide 1 · Couverture</div>
+<section class="slide theme-agathe">
+  <div class="slide-num" style="color:var(--cream);opacity:.6;z-index:2;">1</div>
+  <div class="photo-ph"><span>📷 Agathe sur son tapis (ou tapis posé près d'une fenêtre), lumière du matin chaude/dorée. Ambiance intime et lumineuse.</span></div>
+  <div class="photo-overlay">
+    <p class="kicker" style="color:var(--butter);">Pourquoi j'ai créé ça</p>
+    <h1 class="title" style="color:var(--cream);">Bientôt :<br>pratiquer où<br>que vous soyez 🤍</h1>
+    <p class="hand" style="color:var(--butter);margin-top:20px;">swipe →</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2 — Le constat (bulles citations) ============ -->
+<div class="slide-label">AV-S07 · Slide 2 · Le constat</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">2</div>
+  <p class="kicker">Le constat</p>
+  <div style="display:flex;flex-direction:column;gap:24px;margin:12px 0 32px;">
+    <div style="background:var(--cream-2);border-radius:28px 28px 28px 6px;padding:30px 38px;font-size:32px;font-style:italic;color:var(--teal);max-width:88%;">« Agathe, je déménage. »</div>
+    <div style="background:var(--cream-2);border-radius:28px 28px 28px 6px;padding:30px 38px;font-size:32px;font-style:italic;color:var(--teal);max-width:88%;align-self:flex-end;border-radius:28px 28px 6px 28px;">« Je suis trop loin de Saint-Étienne. »</div>
+    <div style="background:var(--cream-2);border-radius:28px 28px 28px 6px;padding:30px 38px;font-size:32px;font-style:italic;color:var(--teal);max-width:88%;">« Mes horaires ont changé, je ne peux plus venir. »</div>
+  </div>
+  <p class="body"><strong>J'entends ça trop souvent.</strong> Et ça me serre le cœur à chaque fois.</p>
+  <div class="brand-footer" style="color:var(--orange);">Agathe Veillith <span class="at">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 3 — Le déclic ============ -->
+<div class="slide-label">AV-S07 · Slide 3 · Le déclic</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">3</div>
+  <p class="kicker">Le déclic</p>
+  <h2 class="title">8 personnes<br>max.</h2>
+  <p class="body">Le studio, c'est <strong>8 personnes maximum.</strong> Un choix que j'assume. Mais ça veut dire que je ne peux pas accompagner tout le monde, ni partout.<br><br>Alors j'ai cherché <strong>un autre chemin.</strong></p>
+  <div class="brand-footer" style="color:var(--orange);">Agathe Veillith <span class="at">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 4 — L'idée ============ -->
+<div class="slide-label">AV-S07 · Slide 4 · L'idée</div>
+<section class="slide theme-agathe bg-orange">
+  <div class="slide-num" style="opacity:.5;">4</div>
+  <p class="kicker">L'idée</p>
+  <h2 class="title" style="color:var(--cream);">Amener ma<br>pratique<br>chez vous.</h2>
+  <p class="body" style="color:var(--cream);">Avec la même exigence, le même soin, la même progression que dans la lignée de Mysore. Mais <strong>accessible, à votre rythme, depuis votre tapis.</strong></p>
+  <div class="brand-footer" style="color:var(--cream);">Agathe Veillith <span class="at" style="color:var(--cream);opacity:.85;">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 5 — Pour qui ? ============ -->
+<div class="slide-label">AV-S07 · Slide 5 · Pour qui ?</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">5</div>
+  <h2 class="title">Pour qui&nbsp;?</h2>
+  <ul class="points" style="margin-top:20px;">
+    <li>🧳 Pour mes élèves qui partent et veulent garder le fil.</li>
+    <li>🗺️ Pour celles et ceux qui sont loin.</li>
+    <li>⏰ Pour les matins où venir est impossible.</li>
+    <li>🤍 Pour les curieux·ses qui n'ont jamais osé pousser la porte.</li>
+  </ul>
+  <div class="brand-footer" style="color:var(--orange);">Agathe Veillith <span class="at">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 6 — Ce que ça va permettre ============ -->
+<div class="slide-label">AV-S07 · Slide 6 · Ce que ça va permettre</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">6</div>
+  <h2 class="title">Ce que ça<br>va permettre</h2>
+  <ul class="points" style="margin-top:20px;">
+    <li>Pratiquer sans dépendre d'un créneau.</li>
+    <li>Réviser une posture autant de fois qu'il le faut.</li>
+    <li>Garder un lien avec le studio, où que vous soyez.</li>
+    <li><strong>Continuer, tout simplement.</strong></li>
+  </ul>
+  <div class="brand-footer" style="color:var(--orange);">Agathe Veillith <span class="at">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 7 — CTA ============ -->
+<div class="slide-label">AV-S07 · Slide 7 · CTA</div>
+<section class="slide theme-agathe bg-teal" style="text-align:center;align-items:center;">
+  <div class="slide-num" style="opacity:.5;">7</div>
+  <p style="font-size:96px;margin-bottom:16px;">🔔</p>
+  <h2 class="title" style="color:var(--cream);">C'est pour<br>très bientôt. 🤍</h2>
+  <p class="lead" style="color:var(--cream);">Je ne vous dévoile pas encore tout… mais activez la cloche — vous serez les premier·ères au courant.</p>
+  <span class="cta-pill" style="margin-top:28px;">Activez la cloche 🔔</span>
+  <div class="brand-footer" style="color:var(--cream);left:0;right:0;text-align:center;">Agathe · @chaicorner.ste</div>
+</section>
+
+</body>
+</html>

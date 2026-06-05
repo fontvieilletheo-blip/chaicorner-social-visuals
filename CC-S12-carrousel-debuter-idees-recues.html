@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CC-S12 · Débuter le yoga : 5 idées reçues · carrousel</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<style>
+  /* Idée reçue barrée (système "faux → vrai" du carrousel) */
+  .myth {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 46px;
+    line-height: 1.25;
+    color: var(--terracotta);
+    margin-bottom: 36px;
+    position: relative;
+    display: inline-block;
+  }
+  .myth::after {
+    content: "";
+    position: absolute;
+    left: -6px; right: -6px; top: 52%;
+    height: 4px;
+    background: var(--terracotta);
+    transform: rotate(-1.5deg);
+    opacity: 0.8;
+  }
+</style>
+<!--
+LÉGENDE :
+« J'aimerais bien me mettre au yoga, mais je suis raide comme un piquet. » « Je suis bien trop stressé pour ça. » « Je ne suis pas assez sportif. » 🙊
+
+On entend ces phrases chaque semaine au studio. Et à chaque fois, on a envie de répondre la même chose : ce sont exactement les raisons de commencer, pas de s'en empêcher.
+
+On ne devient pas souple avant de faire du yoga — on le devient grâce à lui. On ne vient pas parce qu'on est zen — on pratique pour l'être un peu plus. Et il existe autant de yogas que de corps : du plus doux au plus dynamique, chacun trouve sa porte d'entrée.
+
+La seule vraie clé, ce n'est pas votre niveau de départ. C'est d'être bien accompagné au début. C'est pour ça qu'on limite chaque cours à 8 personnes maximum : pour vraiment vous voir, ajuster vos postures, répondre à vos questions. De quoi prendre de bonnes habitudes dès les premières séances — et éviter les mauvaises.
+
+Alors si une de ces 5 phrases vous a déjà retenu(e), considérez-la officiellement démontée. 😉
+
+Il n'y a rien à « savoir » avant de venir. Il suffit de franchir la porte, tel(le) que vous êtes.
+
+On vous accueille rue Fauriel — créneaux et réservation en bio. 🙏
+
+HASHTAGS :
+#chaicorner #yogasaintetienne #saintetienne #yogaloire #studiodeyoga42 #yogadebutant #debuterleyoga #yogapourtous #ashtangayoga #yogatraditionnel #yoga #yogafrance #yogapratique #bienetre
+-->
+</head>
+<body>
+
+<!-- SLIDE 1 — COUVERTURE -->
+<div class="slide-label">Slide 1 · Couverture · fond sarcelle</div>
+<section class="slide theme-brand bg-teal">
+  <div class="slide-num">1/8</div>
+  <p class="kicker">Débuter le yoga 🧘</p>
+  <h1 class="title">5 idées<br>reçues.</h1>
+  <p class="lead" style="color:var(--cream);">Spoiler : oui, c'est pour vous. On démonte les 5 phrases qui vous freinent.</p>
+  <p class="hand" style="color:var(--butter);margin-top:44px;">on déboulonne →</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+  <svg class="doodle doodle--tr" width="120" height="120" viewBox="0 0 24 24" fill="none">
+    <path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.3 4 2.5.8-1.2 2-2.5 4-2.5 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#f29ca8"/>
+  </svg>
+</section>
+
+<!-- SLIDE 2 — Il faut être souple -->
+<div class="slide-label">Slide 2 · Idée reçue 1 · fond crème</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">2/8</div>
+  <p class="kicker">Idée reçue n°1</p>
+  <p class="myth">« Il faut être souple »</p>
+  <p class="body">C'est <strong>l'inverse</strong> : on devient souple grâce au yoga. Arriver raide est un excellent point de départ — les progrès n'en sont que plus visibles.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 3 — Il faut être calme et zen -->
+<div class="slide-label">Slide 3 · Idée reçue 2 · fond crème</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">3/8</div>
+  <p class="kicker">Idée reçue n°2</p>
+  <p class="myth">« Il faut être calme et zen »</p>
+  <p class="body">On ne vient pas au yoga parce qu'on est zen. On pratique pour le <strong>devenir</strong>, un peu plus à chaque séance. Trop dans la tête ? C'est justement pour vous.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 4 — Il faut être sportif -->
+<div class="slide-label">Slide 4 · Idée reçue 3 · fond crème</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">4/8</div>
+  <p class="kicker">Idée reçue n°3</p>
+  <p class="myth">« Il faut être sportif »</p>
+  <p class="body">Non. Du yoga doux très accessible aux pratiques dynamiques, il existe un <strong>niveau pour chacun</strong>. On commence là où on en est, le corps s'adapte.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 5 — Je suis trop vieux / trop raide -->
+<div class="slide-label">Slide 5 · Idée reçue 4 · fond crème</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">5/8</div>
+  <p class="kicker">Idée reçue n°4</p>
+  <p class="myth">« Je suis trop vieux / trop raide »</p>
+  <p class="body">Le yoga se pratique <strong>à tout âge</strong>, avec les adaptations qui conviennent. Pas une question de capacité de départ, mais de pratique régulière et bien guidée.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 6 — C'est une religion -->
+<div class="slide-label">Slide 6 · Idée reçue 5 · fond crème</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">6/8</div>
+  <p class="kicker">Idée reçue n°5</p>
+  <p class="myth">« C'est une religion »</p>
+  <p class="body">Le yoga a des racines spirituelles indiennes, mais le pratiquer <strong>n'engage aucune croyance</strong>. Vous en tirez tous les bienfaits du corps et du mental, en gardant votre liberté entière.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 7 — La vraie clé (slide solution, pivot) -->
+<div class="slide-label">Slide 7 · Solution · fond terracotta (pivot)</div>
+<section class="slide theme-brand bg-terracotta">
+  <div class="slide-num">7/8</div>
+  <p class="kicker">La vraie clé</p>
+  <h2 class="title">Être bien<br>guidé(e).</h2>
+  <p class="body" style="color:var(--cream);">En petit groupe (<strong>8 max chez nous</strong>), l'enseignant voit votre alignement, corrige, répond. Quelques ajustements au départ évitent des mois de mauvaises habitudes.</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 8 — CTA -->
+<div class="slide-label">Slide 8 · CTA · fond sarcelle</div>
+<section class="slide theme-brand bg-teal">
+  <div class="slide-num">8/8</div>
+  <h2 class="title">Venez tel(le)<br>que vous êtes.</h2>
+  <p class="lead" style="color:var(--cream);">La seule chose à savoir avant de commencer : rien. Lien en bio 🔗</p>
+  <span class="cta-pill">Réserver un cours</span>
+  <p class="hand" style="color:var(--butter);margin-top:40px;">la porte est ouverte ✦</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+</section>
+
+</body>
+</html>

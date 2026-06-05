@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>AV-S03 — Les 3 doshas : lequel es-tu ? · @agatheveillith</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<!--
+  ====== LÉGENDE (caption) ======
+  Vata, Pitta, Kapha. Si vous avez déjà croisé l'Ayurveda, vous avez sûrement vu passer ces trois mots. Mais concrètement, ça veut dire quoi ?
+
+  Ce sont les trois énergies vitales qui, selon l'Ayurveda, régissent notre corps et notre esprit. La beauté du système, c'est qu'on les porte tous les trois — simplement, l'un ou deux d'entre eux dominent. C'est ce mélange qui explique pourquoi vous digérez comme vous digérez, dormez comme vous dormez, réagissez comme vous réagissez.
+
+  Vata, c'est le mouvement : l'air, l'espace, la créativité, mais aussi l'anxiété quand il s'emballe. Pitta, c'est le feu : l'intensité, l'ambition, le feu digestif… et la colère quand il déborde. Kapha, c'est la terre : la stabilité, la douceur, l'endurance — et la lourdeur quand il stagne.
+
+  J'adore l'image de la voiture au feu rouge pour les distinguer (slide 6 😄). Caricatural, mais terriblement parlant pour s'observer au quotidien.
+
+  Une précision importante : ce post est une porte d'entrée ludique, pas un diagnostic. Identifier vraiment sa constitution demande de l'observation et, idéalement, un échange.
+
+  Alors, vous vous reconnaissez dans lequel ? Dites-moi en commentaire 👇 💨 Vata · 🔥 Pitta · 🌿 Kapha
+
+  ====== HASHTAGS ======
+  #ayurveda #doshas #vatapittakapha #vata #pitta #kapha #ayurvedafrance #medecineayurvedique #bienetre #yogaetayurveda #yogasaintetienne #saintetienne #santenaturelle #connaissancedesoi
+-->
+</head>
+<body>
+
+<!-- ============ SLIDE 1 — COUVERTURE ============ -->
+<div class="slide-label">AV-S03 · Slide 1 · Couverture</div>
+<section class="slide theme-agathe bg-cream" style="text-align:center;align-items:center;">
+  <div class="slide-num">1</div>
+  <p class="kicker">Ayurvéda · petit test</p>
+  <h1 class="title" style="color:var(--teal);">Les 3 doshas<br><span style="color:var(--orange);">Lequel es-tu&nbsp;?</span></h1>
+  <p class="lead">Un petit test pour t'auto-observer 👇</p>
+  <p style="font-size:64px;letter-spacing:18px;margin-top:40px;">💨🔥🌿</p>
+  <p class="hand" style="margin-top:24px;color:var(--teal);">swipe →</p>
+  <div class="brand-footer" style="color:var(--orange);left:0;right:0;text-align:center;">Agathe Veillith <span class="at">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 2 — C'est quoi un dosha ? ============ -->
+<div class="slide-label">AV-S03 · Slide 2 · C'est quoi un dosha ?</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">2</div>
+  <h2 class="title">C'est quoi<br>un dosha&nbsp;?</h2>
+  <p class="body">En Ayurvéda, les doshas sont <strong>3 énergies vitales</strong> qui régissent corps et esprit. On les a tous les trois — mais pas dans les mêmes proportions. <strong>C'est ce qui nous rend uniques.</strong></p>
+  <div class="brand-footer" style="color:var(--orange);">Agathe Veillith <span class="at">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 3 — VATA (air & espace, gris-bleu froid) ============ -->
+<div class="slide-label">AV-S03 · Slide 3 · VATA</div>
+<section class="slide theme-agathe" style="background:#5b7178;color:var(--cream);">
+  <div class="slide-num" style="opacity:.5;">3</div>
+  <p style="font-size:72px;margin-bottom:8px;">💨</p>
+  <p class="kicker" style="color:var(--butter);">Vata · l'air &amp; l'espace</p>
+  <h2 class="title" style="color:var(--cream);">Le mouvement.</h2>
+  <p class="body" style="color:var(--cream);">Fin·e, créatif·ve, plein·e d'idées, vif·ve. Mains froides, peau qui tiraille.<br><br><strong>En excès :</strong> anxiété, insomnie, esprit qui s'emballe.</p>
+  <p class="hand" style="color:var(--butter);margin-top:28px;">ton mot : léger, mobile, changeant</p>
+  <div class="brand-footer" style="color:var(--cream);">Agathe Veillith <span class="at" style="color:var(--cream);opacity:.85;">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 4 — PITTA (feu & eau, terracotta) ============ -->
+<div class="slide-label">AV-S03 · Slide 4 · PITTA</div>
+<section class="slide theme-agathe bg-terracotta">
+  <div class="slide-num" style="opacity:.5;">4</div>
+  <p style="font-size:72px;margin-bottom:8px;">🔥</p>
+  <p class="kicker" style="color:var(--butter);">Pitta · le feu &amp; l'eau</p>
+  <h2 class="title" style="color:var(--cream);">La transformation.</h2>
+  <p class="body" style="color:var(--cream);">Intense, ambitieux·se, esprit vif et analytique. Digestion solide, tendance à rougir.<br><br><strong>En excès :</strong> irritabilité, brûlures d'estomac, impatience.</p>
+  <p class="hand" style="color:var(--butter);margin-top:28px;">ton mot : chaud, intense, déterminé</p>
+  <div class="brand-footer" style="color:var(--cream);">Agathe Veillith <span class="at" style="color:var(--cream);opacity:.85;">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 5 — KAPHA (eau & terre, vert/sauge) ============ -->
+<div class="slide-label">AV-S03 · Slide 5 · KAPHA</div>
+<section class="slide theme-agathe bg-sage">
+  <div class="slide-num" style="opacity:.5;">5</div>
+  <p style="font-size:72px;margin-bottom:8px;">🌿</p>
+  <p class="kicker" style="color:var(--teal-deep);">Kapha · l'eau &amp; la terre</p>
+  <h2 class="title" style="color:var(--teal-deep);">La structure.</h2>
+  <p class="body" style="color:var(--teal-deep);">Calme, posé·e, loyal·e, endurant·e. Belle peau, grands yeux doux.<br><br><strong>En excès :</strong> lourdeur, léthargie, difficulté à lâcher.</p>
+  <p class="hand" style="color:var(--terracotta);margin-top:28px;">ton mot : stable, doux, ancré</p>
+  <div class="brand-footer" style="color:var(--teal-deep);">Agathe Veillith <span class="at" style="color:var(--teal-deep);opacity:.7;">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 6 — Et au feu rouge ? ============ -->
+<div class="slide-label">AV-S03 · Slide 6 · Et au feu rouge ?</div>
+<section class="slide theme-agathe bg-cream">
+  <div class="slide-num">6</div>
+  <h2 class="title">Et au feu<br>rouge&nbsp;? 🚦</h2>
+  <p class="body">La voiture devant ne démarre pas…</p>
+  <ul class="points" style="margin-top:24px;">
+    <li>💨 <strong>Vata</strong> panique.</li>
+    <li>🔥 <strong>Pitta</strong> klaxonne et lève les bras.</li>
+    <li>🌿 <strong>Kapha</strong> attend tranquillement en profitant du soleil.</li>
+  </ul>
+  <p class="hand" style="margin-top:32px;color:var(--orange);">Lequel êtes-vous ? 😄</p>
+  <div class="brand-footer" style="color:var(--orange);">Agathe Veillith <span class="at">@agatheveillith</span></div>
+</section>
+
+<!-- ============ SLIDE 7 — CTA ============ -->
+<div class="slide-label">AV-S03 · Slide 7 · CTA</div>
+<section class="slide theme-agathe bg-teal" style="text-align:center;align-items:center;">
+  <div class="slide-num" style="opacity:.5;">7</div>
+  <h2 class="title" style="color:var(--cream);">Alors, tu te<br>reconnais<br>dans lequel&nbsp;?</h2>
+  <p class="lead" style="color:var(--cream);">Dis-moi en commentaire 👇</p>
+  <p style="font-size:54px;letter-spacing:6px;margin-top:24px;color:var(--cream);">💨 Vata · 🔥 Pitta · 🌿 Kapha</p>
+  <p class="body" style="color:var(--cream);opacity:.8;margin-top:36px;font-size:26px;">Le guide complet est en bio · @chaicorner.ste</p>
+  <div class="brand-footer" style="color:var(--cream);left:0;right:0;text-align:center;">Agathe Veillith <span class="at" style="color:var(--cream);opacity:.85;">@agatheveillith</span></div>
+</section>
+
+</body>
+</html>

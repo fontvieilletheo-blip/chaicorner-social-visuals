@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CC-S01 · Carrousel — Qu'est-ce que l'Ashtanga ?</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<!--
+=====================================================================
+LÉGENDE (caption)
+=====================================================================
+« L'Ashtanga ? C'est pour les sportifs, non ? »
+
+C'est sans doute la phrase qu'on entend le plus au studio. Et à chaque fois, on prend le temps de déconstruire l'idée. 🌿
+
+L'Ashtanga, c'est un yoga dynamique où les postures s'enchaînent toujours dans le même ordre, reliées par le souffle. Cette répétition n'est pas une contrainte ennuyeuse — c'est tout le contraire. Quand le corps connaît la séquence, le mental peut enfin se poser. La pratique devient une méditation en mouvement, un souffle après l'autre.
+
+Au cœur de la méthode, trois points d'attention : le souffle ujjayi (ce souffle océanique qui sert de métronome), les bandhas (les verrous internes qui protègent le dos et stabilisent), et le drishti (le point de regard qui canalise l'attention). C'est ce qui fait de l'Ashtanga bien plus qu'une suite de postures.
+
+Et non, il ne faut être ni souple, ni jeune, ni sportif pour commencer. Il existe des variations pour chaque corps. Tout débute par les Salutations au Soleil, qu'on apprend tranquillement, ensemble.
+
+Au Chaï Corner, on transmet cette pratique dans la lignée directe de Mysore — Pattabhi Jois → Vijay Kumar → Agathe — en très petit groupe (8 personnes max), pour que chacun reçoive l'attention qu'il mérite.
+
+Curieux d'essayer ? Notre porte est ouverte, 12 cours Fauriel à Saint-Étienne. 🙏
+
+=====================================================================
+HASHTAGS
+=====================================================================
+#ashtangayoga #ashtanga #yogasaintetienne #saintetienne #yogaloire #studiodeyoga42 #yogatraditionnel #mysorestyle #yoga #yogafrance #yogapratique #meditation #pranayama #yogadebutant
+-->
+</head>
+<body>
+
+<!-- SLIDE 1 — COUVERTURE -->
+<div class="slide-label">Slide 1 · Couverture</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">1</div>
+  <p class="kicker">Ashtanga Yoga</p>
+  <h1 class="title">Qu'est-ce que<br>l'Ashtanga&nbsp;?</h1>
+  <p class="lead">Le yoga qu'on enseigne au studio, expliqué simplement.</p>
+  <p class="hand" style="margin-top:48px;">on t'explique →</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+  <!-- doodle cœur -->
+  <svg class="doodle doodle--tr" width="120" height="120" viewBox="0 0 24 24" fill="none">
+    <path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.3 4 2.5.8-1.2 2-2.5 4-2.5 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#f29ca8"/>
+  </svg>
+</section>
+
+<!-- SLIDE 2 — La définition -->
+<div class="slide-label">Slide 2 · La définition</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">2</div>
+  <h2 class="title">La définition</h2>
+  <p class="body">Un yoga dynamique où les postures s'enchaînent <strong>dans un ordre fixe</strong>, reliées par le souffle.</p>
+  <p class="body" style="margin-top:28px;">Ici, on pratique toujours les mêmes postures, dans le même ordre.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 3 — Pourquoi un ordre fixe ? -->
+<div class="slide-label">Slide 3 · Pourquoi un ordre fixe ?</div>
+<section class="slide theme-brand bg-teal">
+  <div class="slide-num">3</div>
+  <h2 class="title">Pourquoi un<br>ordre fixe&nbsp;?</h2>
+  <p class="body" style="color:var(--cream);">Quand on ne se demande plus « quelle posture vient après ? », l'attention se libère.</p>
+  <p class="body" style="color:var(--cream);margin-top:28px;">Elle va dans le souffle, dans les sensations. La séquence devient une <strong>méditation en mouvement</strong>.</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 4 — Le souffle, ce métronome -->
+<div class="slide-label">Slide 4 · Le souffle</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">4</div>
+  <h2 class="title">Le souffle,<br>ce métronome</h2>
+  <p class="body">On respire en <em style="color:var(--terracotta);font-style:italic;">ujjayi</em> : un souffle légèrement sonore, comme l'océan.</p>
+  <p class="body" style="margin-top:28px;">Un mouvement, un souffle. C'est lui qui donne le rythme — pas l'inverse.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 5 — Les 3 points d'attention (tristana) -->
+<div class="slide-label">Slide 5 · Tristana</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">5</div>
+  <h2 class="title">Les 3 points<br>d'attention</h2>
+  <ul class="points">
+    <li>Le souffle (<em style="color:var(--terracotta);font-style:italic;">ujjayi</em>)</li>
+    <li>Les <em style="color:var(--terracotta);font-style:italic;">bandhas</em> — les verrous internes qui stabilisent</li>
+    <li>Le <em style="color:var(--terracotta);font-style:italic;">drishti</em> — le point de regard qui pose le mental</li>
+  </ul>
+  <p class="body" style="margin-top:28px;">C'est ce qui distingue l'Ashtanga d'une simple gymnastique.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 6 — Tout commence par les Salutations au Soleil -->
+<div class="slide-label">Slide 6 · Salutations au Soleil</div>
+<section class="slide theme-brand bg-sage">
+  <div class="slide-num">6</div>
+  <h2 class="title">Tout commence<br>par les Salutations<br>au Soleil</h2>
+  <p class="body" style="color:var(--teal-deep);">Chaque pratique s'ouvre par elles : 5 Salutations A, puis 3 à 5 B.</p>
+  <p class="body" style="color:var(--teal-deep);margin-top:28px;">Pour les débutants, c'est 80 % des premières semaines. On y va pas à pas.</p>
+  <div class="brand-footer" style="color:var(--teal-deep);">Chaï Corner <span class="at" style="color:var(--teal-deep);opacity:.7;">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 7 — Une lignée transmise -->
+<div class="slide-label">Slide 7 · La lignée</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">7</div>
+  <h2 class="title">Une lignée<br>transmise</h2>
+  <p class="body" style="font-family:var(--serif);font-size:36px;line-height:1.6;">Patanjali <span style="color:var(--terracotta);">→</span> Krishnamacharya <span style="color:var(--terracotta);">→</span> Pattabhi&nbsp;Jois <span style="color:var(--terracotta);">→</span> Vijay&nbsp;Kumar <span style="color:var(--terracotta);">→</span> Agathe.</p>
+  <p class="body" style="margin-top:32px;">On ne réinvente pas la pratique : on la reçoit, et on la transmet. C'est ça, l'Ashtanga.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 8 — CTA -->
+<div class="slide-label">Slide 8 · CTA</div>
+<section class="slide theme-brand bg-terracotta">
+  <div class="slide-num">8</div>
+  <h2 class="title">Envie<br>d'essayer&nbsp;?</h2>
+  <p class="lead" style="color:var(--cream);">On vous accueille en petit groupe de 8 max, tous niveaux. Premiers pas guidés au studio, 12 cours Fauriel.</p>
+  <span class="cta-pill">Enregistrez ce post &amp; passez nous voir</span>
+  <p class="hand" style="color:var(--butter);margin-top:40px;">à très vite ✦</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>AV-S05 — Storyset coulisses de tournage · @agatheveillith</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<!--
+  ====== LÉGENDE (caption — pour le repost carrousel / contexte) ======
+  Ça fait des semaines que je vous cache quelque chose. 😊
+
+  Le studio s'est transformé : des lumières, une caméra, un trépied, et des tapis partout. On a filmé. Beaucoup. (Et oui, on a refait certaines postures bien plus de fois que je ne l'avouerai jamais.)
+
+  Je ne vais pas encore tout vous dévoiler — laissez-moi garder un peu de mystère. Mais je peux vous dire l'intention derrière tout ça : faire en sorte que ma pratique ne s'arrête pas aux murs du Chaï Corner. Qu'elle puisse vous rejoindre, même quand vous ne pouvez pas pousser la porte du studio.
+
+  Ce projet me tient vraiment à cœur. Je l'ai pensé pour vous : pour mes élèves qui déménagent, pour celles et ceux qui sont loin de Saint-Étienne, pour les matins où venir en cours est impossible. J'avoue, j'ai un peu le trac de vous montrer ça. 🤍
+
+  Pour l'instant, je vous laisse avec ces quelques coulisses. La suite arrive très bientôt — activez la cloche pour ne pas la manquer.
+
+  Et dites-moi : à votre avis, on a filmé quoi ? 👇
+
+  ====== HASHTAGS ======
+  #coulisses #behindthescenes #yogaenligne #bientot #yogasaintetienne #saintetienne #ashtangayoga #ashtanga #yoga #yogafrance #mysorestyle #pratiquedeyoga #teaser #chaicorner
+
+  NOTE : storyset = série de 6 stories (format 9:16), à publier dans la journée, ordre chronologique.
+  Esthétique "vlog" assumée, plus brute que les posts. Filtre chaud léger. Ne RIEN révéler (prix/format/date).
+-->
+</head>
+<body>
+
+<!-- ============ STORY 1 — Le teasing ============ -->
+<div class="slide-label">AV-S05 · Story 1/6 · Le teasing · 9:16</div>
+<section class="slide slide-story theme-agathe">
+  <div class="photo-ph"><span>📷 Agathe face caméra, sourire complice, en tenue de pratique. Décor de tournage en arrière-plan flou : projecteur, tapis, caméra. Esthétique vlog, filtre chaud léger.</span></div>
+  <div class="photo-overlay" style="padding:200px 96px 200px;">
+    <h1 class="title" style="color:var(--cream);font-size:96px;">Ça fait des<br>semaines que je<br>vous cache<br>un truc… 👀</h1>
+  </div>
+</section>
+
+<!-- ============ STORY 2 — Le plateau ============ -->
+<div class="slide-label">AV-S05 · Story 2/6 · Le plateau · 9:16</div>
+<section class="slide slide-story theme-agathe">
+  <div class="photo-ph"><span>📷 Plan large du « plateau » : le studio transformé — tapis posé au centre, lumières/softbox, trépied + caméra. Lumineux, making-of.</span></div>
+  <div class="photo-overlay" style="padding:200px 96px 200px;">
+    <h1 class="title" style="color:var(--cream);font-size:92px;">On a transformé<br>le studio en<br>plateau de<br>tournage.</h1>
+  </div>
+</section>
+
+<!-- ============ STORY 3 — Détail matos ============ -->
+<div class="slide-label">AV-S05 · Story 3/6 · Détail matos · 9:16</div>
+<section class="slide slide-story theme-agathe bg-teal" style="justify-content:center;text-align:center;align-items:center;">
+  <p style="font-size:120px;margin-bottom:32px;">🧘</p>
+  <p class="kicker" style="color:var(--butter);">Indice n°1</p>
+  <h1 class="title" style="color:var(--cream);">Il y a beaucoup<br>de tapis.</h1>
+  <p class="body" style="color:var(--cream);opacity:.85;margin-top:24px;">(gros plan caméra / micro / mala / pieds nus sur le tapis)</p>
+</section>
+
+<!-- ============ STORY 4 — Le sticker question ============ -->
+<div class="slide-label">AV-S05 · Story 4/6 · Sticker question · 9:16</div>
+<section class="slide slide-story theme-agathe">
+  <div class="photo-ph"><span>📷 Agathe qui boit un thé entre deux prises, détendue, sur le plateau. Lumière chaude.</span></div>
+  <div class="photo-overlay" style="padding:200px 96px 200px;">
+    <h1 class="title" style="color:var(--cream);font-size:96px;">À votre avis,<br>on filme<br>quoi&nbsp;? 👇</h1>
+    <div style="margin-top:40px;background:var(--cream);color:var(--ink);border-radius:24px;padding:34px 40px;font-size:30px;font-weight:500;">💬 Répondez ici…<br><span style="opacity:.4;">(sticker question)</span></div>
+  </div>
+</section>
+
+<!-- ============ STORY 5 — Coulisse humaine ============ -->
+<div class="slide-label">AV-S05 · Story 5/6 · Coulisse humaine · 9:16</div>
+<section class="slide slide-story theme-agathe">
+  <div class="photo-ph"><span>📷 Bêtisier doux : Agathe en fou rire, reprise d'une posture, ambiance « on la refait ». Spontané, complice.</span></div>
+  <div class="photo-overlay" style="padding:200px 96px 200px;">
+    <h1 class="title" style="color:var(--cream);font-size:88px;">(Spoiler :<br>on a refait cette<br>posture<br>4 fois 😅)</h1>
+  </div>
+</section>
+
+<!-- ============ STORY 6 — Le compte à rebours ============ -->
+<div class="slide-label">AV-S05 · Story 6/6 · Compte à rebours · 9:16</div>
+<section class="slide slide-story theme-agathe bg-cream" style="justify-content:center;text-align:center;align-items:center;">
+  <p style="font-size:110px;margin-bottom:24px;">🤍</p>
+  <h1 class="title" style="color:var(--teal);">Bientôt, vous<br>comprendrez.</h1>
+  <div style="margin-top:44px;background:var(--orange);color:var(--cream);border-radius:28px;padding:36px 56px;font-family:var(--sans);font-weight:600;font-size:34px;display:inline-block;">⏳ Surprise<br><span style="font-size:26px;opacity:.85;font-weight:500;">(sticker compte à rebours)</span></div>
+  <div class="brand-footer" style="color:var(--orange);left:0;right:0;text-align:center;bottom:90px;">Agathe Veillith <span class="at">@agatheveillith</span></div>
+</section>
+
+</body>
+</html>

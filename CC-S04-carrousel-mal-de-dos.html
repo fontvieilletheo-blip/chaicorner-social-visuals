@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CC-S04 · Carrousel — Mal de dos : 3 postures qui soulagent</title>
+<style>
+/* ============================================================
+   CHAÏ CORNER — Design System posts Instagram
+   D'après la charte observée sur @chaicorner.ste + @agatheveillith
+   Slides au format 1080 × 1350 (portrait 4:5, optimal feed)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,500&family=Work+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* Palette commune (charte chaude) */
+  --teal: #224147;
+  --teal-deep: #16302f;
+  --cream: #fdf9f1;
+  --cream-2: #f5ede0;
+  --terracotta: #c0673f;
+  --terracotta-soft: #d98c63;
+  --butter: #f2c94c;
+  --blush: #f4c9c1;
+  --pink: #f29ca8;
+  --sage: #9cae8a;
+  --ink: #2b2521;
+
+  /* Accent perso Agathe */
+  --orange: #e8732a;
+  --orange-deep: #c85a18;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Work Sans', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 40px;
+  font-family: var(--sans);
+}
+
+/* Étiquette au-dessus de chaque slide (non exportée) */
+.slide-label {
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+/* ===== SLIDE : conteneur exact 1080×1350 ===== */
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 110px 96px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* Variante STORY 9:16 (1080×1920) */
+.slide.slide-story { width: 1080px; height: 1920px; padding: 150px 96px; }
+
+/* ===== THÈMES ===== */
+.theme-brand   { --accent: var(--teal); --accent-2: var(--terracotta); }
+.theme-agathe  { --accent: var(--orange); --accent-2: var(--teal); }
+
+/* ===== FONDS ===== */
+.bg-cream      { background: var(--cream); color: var(--ink); }
+.bg-teal       { background: var(--teal); color: var(--cream); }
+.bg-terracotta { background: var(--terracotta); color: var(--cream); }
+.bg-orange     { background: var(--orange); color: var(--cream); }
+.bg-sage       { background: var(--sage); color: var(--teal-deep); }
+.bg-photo      { background: var(--teal); color: var(--cream); } /* placeholder photo */
+
+/* ===== TYPOGRAPHIE ===== */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.bg-teal .kicker, .bg-terracotta .kicker, .bg-orange .kicker { color: var(--butter); }
+
+h1.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+h2.title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.lead {
+  font-size: 34px;
+  line-height: 1.5;
+  font-weight: 300;
+}
+.body {
+  font-size: 30px;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.body strong { font-weight: 600; }
+
+.hand {
+  font-family: var(--hand);
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--accent-2);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+/* Numéro de slide */
+.slide-num {
+  position: absolute;
+  top: 64px; right: 80px;
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  opacity: 0.35;
+}
+
+/* Liste à puces éditoriales */
+ul.points { list-style: none; margin-top: 16px; }
+ul.points li {
+  font-size: 32px;
+  line-height: 1.5;
+  font-weight: 300;
+  padding-left: 56px;
+  position: relative;
+  margin-bottom: 26px;
+}
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 16px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent-2);
+}
+
+/* Marque en pied de slide */
+.brand-footer {
+  position: absolute;
+  bottom: 64px; left: 96px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+.brand-footer .at { font-family: var(--sans); font-weight: 500; opacity: 0.7; font-size: 24px; }
+
+/* Bouton / CTA pill */
+.cta-pill {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 32px;
+  padding: 26px 48px;
+  border-radius: 999px;
+  margin-top: 20px;
+}
+.bg-teal .cta-pill, .bg-orange .cta-pill, .bg-terracotta .cta-pill {
+  background: var(--butter); color: var(--teal-deep);
+}
+
+/* Placeholder photo */
+.photo-ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(45deg, #2a4d52, #2a4d52 24px, #264449 24px, #264449 48px);
+  color: var(--cream); font-size: 30px; font-family: var(--sans); text-align: center;
+  padding: 80px; opacity: 0.96;
+}
+.photo-ph span { max-width: 70%; line-height: 1.5; opacity: 0.85; }
+
+/* Overlay texte sur photo (bas) */
+.photo-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 120px 96px 96px;
+  background: linear-gradient(transparent, rgba(22,48,47,0.85));
+  color: var(--cream);
+}
+
+/* Doodles (SVG inline recommandé ; classes utilitaires) */
+.doodle { position: absolute; pointer-events: none; }
+.doodle--tr { top: 90px; right: 90px; }
+.doodle--bl { bottom: 120px; left: 90px; }
+
+/* Pastille planning (style observé sur le compte) */
+.pill {
+  display: inline-block; border-radius: 40px; padding: 18px 34px;
+  font-family: var(--sans); font-weight: 600; font-size: 28px; margin: 8px;
+}
+.pill--blush { background: var(--blush); color: var(--teal-deep); }
+.pill--butter{ background: var(--butter); color: var(--teal-deep); }
+.pill--sage  { background: var(--sage);  color: var(--cream); }
+
+</style>
+<!--
+=====================================================================
+LÉGENDE (caption)
+=====================================================================
+Plus de 80 % d'entre nous connaîtront un mal de dos un jour. Écran, sédentarité, stress : les causes sont multiples. La bonne nouvelle, c'est que le yoga — bien pratiqué — est l'une des meilleures réponses non médicamenteuses pour soulager et renforcer le dos durablement. 🌿
+
+Pourquoi ça marche ? Trois mécanismes. Le yoga réveille la sangle abdominale profonde qui soutient la colonne de l'intérieur. Il remet de la mobilité segmentaire là où la position assise fige tout. Et il calme le système nerveux par la respiration — car beaucoup de tensions dorsales ont une composante émotionnelle.
+
+Dans ce carrousel, trois postures simples à faire chez vous : le chat-vache pour mobiliser, le pont pour renforcer, le squat profond pour relâcher. Gardez en tête la règle d'or : on cherche à allonger le dos, pas à aller bas. Une brique sous les mains vaut mieux qu'un dos arrondi.
+
+⚠️ Un mot important : si votre douleur est aiguë, récente, irradie dans la jambe, ou s'accompagne de fourmillements, consultez un professionnel de santé avant toute pratique. Le yoga est un complément, jamais un substitut au diagnostic.
+
+Et pour aller plus loin, un œil extérieur change tout : on adapte chaque posture à votre dos, en petit groupe de 8 max, 12 cours Fauriel à Saint-Étienne. 🙏
+
+👉 La séance complète est dans l'article (lien en bio).
+
+=====================================================================
+HASHTAGS
+=====================================================================
+#yogamaldedos #maldedos #yogatherapeutique #yogasaintetienne #saintetienne #yogaloire #studiodeyoga42 #ashtangayoga #yoga #yogafrance #bienetre #yogapratique #mobilite #dos
+-->
+</head>
+<body>
+
+<!-- SLIDE 1 — COUVERTURE -->
+<div class="slide-label">Slide 1 · Couverture</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">1</div>
+  <p class="kicker">Yoga &amp; mal de dos</p>
+  <h1 class="title">Mal de dos :<br>3 postures qui<br>soulagent</h1>
+  <p class="lead">Inspirées de l'Ashtanga, accessibles à tous.</p>
+  <p class="hand" style="margin-top:48px;">on te montre →</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+  <!-- doodle cœur -->
+  <svg class="doodle doodle--tr" width="120" height="120" viewBox="0 0 24 24" fill="none">
+    <path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.3 4 2.5.8-1.2 2-2.5 4-2.5 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#f29ca8"/>
+  </svg>
+</section>
+
+<!-- SLIDE 2 — Pourquoi le yoga aide -->
+<div class="slide-label">Slide 2 · Pourquoi le yoga aide</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">2</div>
+  <h2 class="title">Pourquoi le<br>yoga aide</h2>
+  <p class="body">Le yoga réveille la sangle abdominale profonde qui soutient la colonne, remet de la mobilité dans le dos, et calme le système nerveux par le souffle.</p>
+  <p class="body" style="margin-top:28px;"><strong>Trois leviers, un dos plus libre.</strong></p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 3 — La règle d'or (citation) -->
+<div class="slide-label">Slide 3 · La règle d'or</div>
+<section class="slide theme-brand bg-sage">
+  <div class="slide-num">3</div>
+  <p class="kicker" style="color:var(--teal-deep);">La règle d'or</p>
+  <h2 class="title" style="font-style:italic;color:var(--teal-deep);">« Mieux vaut poser les mains plus haut et garder le dos droit, que toucher le sol en arrondissant. »</h2>
+  <p class="body" style="color:var(--teal-deep);margin-top:24px;">On allonge le dos. On ne le force jamais. 🌿</p>
+  <div class="brand-footer" style="color:var(--teal-deep);">Chaï Corner <span class="at" style="color:var(--teal-deep);opacity:.7;">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 4 — Posture 1 · Le chat-vache -->
+<div class="slide-label">Slide 4 · Posture 1</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">4</div>
+  <p class="kicker">Posture 1</p>
+  <h2 class="title">Le chat-vache</h2>
+  <p class="body">À quatre pattes. Inspire : on creuse, regard vers le haut. Expire : on arrondit, bassin rentré.</p>
+  <p class="body" style="margin-top:28px;"><strong>10 cycles, lentement.</strong> Idéal pour réveiller chaque vertèbre.</p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 5 — Posture 2 · Le pont -->
+<div class="slide-label">Slide 5 · Posture 2</div>
+<section class="slide theme-brand bg-teal">
+  <div class="slide-num">5</div>
+  <p class="kicker">Posture 2</p>
+  <h2 class="title" style="color:var(--cream);">Le pont <span style="font-family:var(--serif);font-style:italic;font-size:40px;color:var(--butter);">Setu Bandhāsana</span></h2>
+  <p class="body" style="color:var(--cream);">Allongé, pieds proches des fessiers. On pousse, on lève le bassin, abdomen engagé.</p>
+  <p class="body" style="color:var(--cream);margin-top:28px;"><strong>5 respirations × 3.</strong> La posture reine pour renforcer le bas du dos.</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 6 — Posture 3 · Le squat profond -->
+<div class="slide-label">Slide 6 · Posture 3</div>
+<section class="slide theme-brand bg-cream">
+  <div class="slide-num">6</div>
+  <p class="kicker">Posture 3</p>
+  <h2 class="title">Le squat profond <span style="font-family:var(--serif);font-style:italic;font-size:40px;color:var(--terracotta);">Mālāsana</span></h2>
+  <p class="body">Pieds écartés, on descend le bassin, mains au cœur. Assis sur une brique si les talons décollent.</p>
+  <p class="body" style="margin-top:28px;">Léger balancement. <strong>Objectif : relâcher le dos.</strong></p>
+  <div class="brand-footer" style="color:var(--teal);">Chaï Corner <span class="at">@chaicorner.ste</span></div>
+</section>
+
+<!-- SLIDE 7 — CTA -->
+<div class="slide-label">Slide 7 · CTA</div>
+<section class="slide theme-brand bg-terracotta">
+  <div class="slide-num">7</div>
+  <h2 class="title">Un œil qui<br>ajuste&nbsp;?</h2>
+  <p class="lead" style="color:var(--cream);">On adapte chaque posture à votre dos, en petit groupe. À pratiquer en douceur, et jamais sur une douleur aiguë.</p>
+  <span class="cta-pill">Enregistrez ce post 📌 · Article en bio</span>
+  <p class="hand" style="color:var(--butter);margin-top:40px;">prends soin de toi ✦</p>
+  <div class="brand-footer" style="color:var(--cream);">Chaï Corner <span class="at" style="color:var(--cream);opacity:.8;">@chaicorner.ste</span></div>
+</section>
+
+</body>
+</html>
