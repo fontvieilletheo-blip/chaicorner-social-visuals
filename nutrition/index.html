@@ -631,18 +631,59 @@ function compute(pr){
   const pPerKg = Math.min(1.6, pBase + (train>=4?0.2:train>=2?0.1:0));
   const protPro = +pr.protG>0 ? +pr.protG : 0;                     // valeur fixée par un professionnel
   const p = protPro || pPerKg*refW;
-  const l = Math.max(0.8*refW, target*0.30/9);
+  const l = target*0.35/9;                                        // Anses 2011 : lipides 35 à 40 % de l'énergie
   const c = Math.max(0,(target-p*4-l*9)/4);
   const weekly = (target-tdee)*7/7700;
   const tw=+pr.targetW||0; let weeks=null;
   if(tw && weekly && Math.sign(tw-w)===Math.sign(weekly)) weeks=Math.ceil((tw-w)/weekly);
-  return {protPro, refW_bmi:h&&bmi>25, bmr, base, commute, sport, tdee, target, p, l, c, fiber: Math.max(25, target/1000*14), bmi, pPerKg, refW, weekly, weeks, dayBase: base+commute, formula: base+commute+sport, water: pr.sex==="h"?2000:1600};
+  return {protPro, refW_bmi:h&&bmi>25, bmr, base, commute, sport, tdee, target, p, l, c, fiber: 30 /* Anses 2016 : 30 g/j */, bmi, pPerKg, refW, weekly, weeks, dayBase: base+commute, formula: base+commute+sport, water: pr.sex==="h"?2000:1600};
 }
 // Références nutritionnelles pour la population adulte (Anses, 2021) ; [valeur, "min" à atteindre | "max" à ne pas dépasser]
+const REFSRC = {
+ ca:"EFSA 2015 (PRI) : 1 000 mg de 18 à 24 ans, 950 mg ensuite", fe:"EFSA 2015 (PRI) : 11 mg pour les hommes et après la ménopause, 16 mg pour les femmes réglées", mg:"EFSA 2015 (AI)", k:"EFSA 2016 (AI)",
+ zn:"EFSA 2014 (PRI), pour un apport moyen en phytates (600 mg/j)", ph:"EFSA 2015 (AI)", i:"EFSA 2014 (AI)", se:"EFSA 2014 (AI)", cu:"EFSA 2015 (AI)", mn:"EFSA 2013 (AI)",
+ va:"EFSA 2015 (PRI)", vd:"EFSA 2016 (AI), en l'absence de synthèse par la peau", ve:"EFSA 2015 (AI, alpha-tocophérol)", vk:"EFSA 2017 (AI, 1 µg/kg)", vc:"EFSA 2013 (PRI)",
+ b1:"EFSA 2016 (PRI) : 0,1 mg par mégajoule", b2:"EFSA 2017 (PRI)", b3:"EFSA 2014 (PRI) : 1,6 mg par mégajoule", b5:"EFSA 2014 (AI)", b6:"EFSA 2016 (PRI)", b9:"EFSA 2014 (PRI, équivalents folates)", b12:"EFSA 2015 (AI)",
+ ala:"Anses 2011 : 1 % de l'énergie", om3:"Anses 2011 : 250 mg d'EPA et 250 mg de DHA", sat:"Anses 2011 : 12 % de l'énergie au maximum", su:"Anses 2016 : 100 g/j de sucres hors lactose et galactose au maximum",
+ sel:"OMS 2012 : moins de 5 g/j", alc:"Santé publique France et INCa 2017 : 2 verres standard (2 × 10 g) par jour au maximum, et pas tous les jours" };
+const SOURCES = [
+ ["Dépense énergétique", [
+  ["Métabolisme de base", "Équation de Mifflin-St Jeor : 10 × poids + 6,25 × taille − 5 × âge, +5 (homme) ou −161 (femme). Si la masse grasse est connue, équation de Katch-McArdle : 370 + 21,6 × masse maigre.", "Mifflin et al., Am J Clin Nutr 1990 ; McArdle, Katch et Katch, Exercise Physiology"],
+  ["Travail et vie quotidienne", "Métabolisme × 1,2 (assis), 1,35 (mixte) ou 1,5 (physique).", "Facteurs d'activité usuels, inspirés des niveaux d'activité physique FAO/OMS/UNU 2004. Choix de l'app, sport et trajets comptés à part."],
+  ["Sport et trajets", "(MET − 1) × poids × heures. Trajets à pied ou à vélo : 2,5 kcal par kg et par heure. Sport lissé sur la semaine.", "Compendium of Physical Activities (Ainsworth et al. 2011, mise à jour Herrmann et al. 2024) ; valeurs arrondies"],
+  ["Déficit ou surplus", "Perte : −12 % (progressif) ou −20 % (soutenu), jamais sous le métabolisme de base. Prise : +7 % ou +12 %.", "Choix de l'app, dans les fourchettes habituelles des recommandations cliniques"],
+  ["Vitesse de perte", "1 kg de masse grasse ≈ 7 700 kcal.", "Approximation classique (Wishnofsky 1958). Elle surestime la perte au fil des semaines (Hall et al., Lancet 2011) : d'où le recalcul avec tes pesées."],
+  ["Dépense réelle", "Apport moyen noté − variation de poids × 7 700 ÷ nombre de jours, après au moins 10 jours et 7 jours de repas notés.", "Bilan énergétique observé"]]],
+ ["Macronutriments", [
+  ["Protéines", "1,0 g/kg (maintien), 1,2 (perte) ou 1,4 (prise de muscle), +0,1 dès 2 h de sport par semaine et +0,2 dès 4 h, plafond 1,6 g/kg, appliqué au poids de référence (celui d'un IMC de 25 si l'IMC dépasse 25). Valeur de ta ou ton nutritionniste prioritaire si tu la renseignes.", "Repère adulte 0,83 g/kg (EFSA 2012, Anses) ; 1,2 à 1,6 g/kg en perte de poids (Leidy et al., Am J Clin Nutr 2015) ; 1,4 à 2,0 g/kg chez les sportifs (ISSN, Jäger et al. 2017). Les coefficients exacts sont un choix de l'app."],
+  ["Lipides", "35 % de l'énergie.", "Anses 2011 : 35 à 40 % de l'énergie"],
+  ["Glucides", "Le reste des calories.", "Anses 2016 : 40 à 55 % de l'énergie"],
+  ["Fibres", "30 g par jour.", "Anses 2016"],
+  ["Eau", "1,6 L (femme) ou 2 L (homme) de boissons par jour.", "EFSA 2010 : 2 L et 2,5 L d'eau au total, dont environ 20 % apportés par les aliments"]]],
+ ["Aliments et saisons", [
+  ["Composition des aliments", "Valeurs pour 100 g, multipliées par les grammes saisis. Une valeur absente de la table compte pour zéro : les totaux en micronutriments sont des minimums.", "Table Ciqual 2025, Anses (licence ouverte)"],
+  ["Produits emballés (site)", "Valeurs de l'étiquette pour 100 g.", "Open Food Facts, base collaborative"],
+  ["Estimation par photo ou par texte", "Claude décompose le plat ; chaque aliment est rapproché de la table Ciqual quand c'est possible, sinon l'estimation de Claude est gardée (calories et macros seules).", "Estimation, à corriger à la main"],
+  ["Fruits et légumes de saison", "Calendrier mois par mois pour la France métropolitaine.", "Calendriers de saison publics (type mangerbouger.fr), saisis de mémoire : à vérifier"]]],
+ ["Ayurveda", [
+  ["Saisons, constitution, kichari, jeûne", "Saisons (ritucharya), doshas et conseils alimentaires associés. Le questionnaire de 6 questions est une simplification.", "Tradition ayurvédique (Charaka Samhita, Ashtanga Hridaya). Ce n'est pas une source scientifique : aucun de ces conseils n'est validé par des études cliniques, ni relu par un praticien pour l'app."]]]];
+// Mesures ménagères utilisées quand tu écris une quantité sans grammes
+const MEASURES = [["Cuillère à soupe d'huile ou de beurre","12 g"],["Cuillère à soupe (autres aliments)","15 g"],["Cuillère à café","5 g"],["Bol, assiette","300 g"],["Verre","200 ml (vin : 125 ml, le verre standard de 10 g d'alcool)"],["Tasse","200 ml (expresso : 50 ml)"],["Poignée","30 g"],["Carré de chocolat","10 g"],["Boule (glace)","60 g"],["Tranche","la portion de l'aliment, 40 g au plus"],["Canette, pinte","330 ml, 500 ml"],["Aliment sans quantité","sa portion par défaut (tableau ci-dessous), sinon 150 g"]];
+function viewSources(){
+  const pr=prof(), c=compute(pr), R=refs(pr,c), sec=(t,rows)=>`<details class="acc" id="d-src-${norm(t).replace(/ /g,"-")}"><summary>${t}</summary><div class="body">${rows}</div></details>`;
+  const calc = SOURCES.map(([t,list])=>sec(t, list.map(([n,how,src])=>`<div><h3>${n}</h3><p style="margin-top:4px">${how}</p><p class="small muted" style="margin-top:4px">Source : ${src}</p></div>`).join(""))).join("");
+  const micro = sec("Repères en micronutriments", `<p class="small muted">Valeurs pour ton profil. PRI : apport couvrant les besoins de presque tout le monde. AI : apport jugé suffisant quand les données manquent pour une PRI.</p><div class="tw"><table><tr><th>Nutriment</th><th>Repère</th></tr>${MICROS.flatMap(g=>g[1]).map(([k,lab,unit])=>`<tr><td>${lab}<br><span class="small muted">${REFSRC[k]||""}</span></td><td>${R[k][1]==="max"?"≤ ":""}${r1(R[k][0])} ${unit}</td></tr>`).join("")}</table></div>`);
+  const meas = sec("Mesures ménagères", `<div class="tw"><table>${MEASURES.map(([a,b])=>`<tr><td>${a}</td><td style="text-align:left">${b}</td></tr>`).join("")}</table></div><p class="small muted">Valeurs usuelles, choisies pour l'app.</p>`);
+  const por = sec("Portions par défaut", DB.ready?`<p class="small muted">Utilisées quand tu écris « une pomme » ou « du riz » sans grammes. Ce sont des portions moyennes que j'ai estimées, pas des mesures : à comparer avec les portions observées par l'Anses (étude INCA 3, 2017) ou le manuel photo SU.VI.MAX. Corrige toujours les grammes quand tu les connais.</p>
+    <div class="tw"><table><tr><th>Mot saisi</th><th>Portion</th></tr>${DB.alias.slice().sort((a,b)=>a.label.localeCompare(b.label,"fr")).map(a=>`<tr><td>${esc(a.label)}<br><span class="small muted">${esc(DB.foods[a.i][0])}</span></td><td>${a.u} g</td></tr>`).join("")}</table></div>`:`<p class="empty">Chargement de la table…</p>`);
+  return `<p class="small muted">Chaque calcul de l'app, sa formule et d'où elle vient. Les choix propres à l'app sont signalés comme tels. Les valeurs de référence ont été saisies d'après ces documents, sans relecture par un professionnel de santé.</p>
+  <section class="plain">${calc}${micro}${meas}${por}</section>`;
+}
 function refs(pr,c){
   const h=pr.sex==="h", mj=c.target*4.184/1000;
-  return { ca:[+pr.age<25?1000:950,"min"], fe:[h||+pr.age>=50?11:16,"min"], mg:[h?380:300,"min"], k:[3500,"min"], zn:[h?11:9.3,"min"], ph:[550,"min"], i:[150,"min"], se:[70,"min"], cu:[h?1.9:1.5,"min"], mn:[h?2.8:2.5,"min"],
-    va:[h?750:650,"min"], vd:[15,"min"], ve:[h?10:9,"min"], vk:[79,"min"], vc:[110,"min"], b1:[0.14*mj,"min"], b2:[1.6,"min"], b3:[1.6*mj,"min"], b5:[h?5.8:4.7,"min"], b6:[h?1.7:1.6,"min"], b9:[330,"min"], b12:[4,"min"],
+  // Valeurs de référence de l'EFSA (2013-2017) pour l'adulte, reprises pour l'essentiel par l'Anses en 2021. Voir REFSRC.
+  return { ca:[+pr.age<25?1000:950,"min"], fe:[h||+pr.age>=50?11:16,"min"], mg:[h?350:300,"min"], k:[3500,"min"], zn:[h?11:8.9,"min"], ph:[550,"min"], i:[150,"min"], se:[70,"min"], cu:[h?1.6:1.3,"min"], mn:[3,"min"],
+    va:[h?750:650,"min"], vd:[15,"min"], ve:[h?13:11,"min"], vk:[70,"min"], vc:[h?110:95,"min"], b1:[0.1*mj,"min"], b2:[1.6,"min"], b3:[1.6*mj,"min"], b5:[5,"min"], b6:[h?1.7:1.6,"min"], b9:[330,"min"], b12:[4,"min"],
     ala:[c.target*0.01/9,"min"], om3:[500,"min"], sat:[c.target*0.12/9,"max"], su:[100,"max"], sel:[5,"max"], alc:[20,"max"] };
 }
 function doshaOf(pr){ const q=pr.quiz||[]; if(q.filter(x=>x!=null).length<QUIZ.length) return null;
@@ -877,6 +918,7 @@ function viewSheet(){
       <div style="width:92px"><input id="act-min" type="text" inputmode="numeric" min="1" placeholder="min" aria-label="Durée en minutes"></div><button class="btn primary" data-act="addact">Ajouter</button></div>
     ${D.acts.length?D.acts.map(a=>`<div class="item" style="grid-template-columns:1fr auto 34px"><div class="n"><b>${esc(a.name)}</b><span>${a.min} min</span></div><span class="num">${r0(a.kcal)} kcal</span><button class="x" data-delact="${a.id}" aria-label="Supprimer">×</button></div>`).join(""):""}
     <p class="small muted">Dépense de base du jour : ${r0(c.dayBase)} kcal (métabolisme, travail, trajets). Tes séances s'y ajoutent.</p>`; }
+  if(S.sheet==="sources"){ title="Sources et méthodes"; body=viewSources(); }
   if(S.sheet==="weight"){ title="Pesée";
     body=`<div class="row"><div style="width:130px"><input id="weight" type="text" inputmode="decimal" step="0.1" placeholder="kg" value="${D.weight||""}" aria-label="Poids du jour en kg"></div><button class="btn primary" data-act="weight">Enregistrer</button></div>
     <p class="small muted">Le matin à jeun, 2 à 3 fois par semaine. La courbe et ta dépense réelle sont dans Suivi.</p>`; }
@@ -963,7 +1005,7 @@ function viewPlan(){
       <tr><td><b>Dépense totale ${+pr.tdeeReal?"mesurée sur tes pesées":"estimée"}</b></td><td><b>${r0(c.tdee)} kcal</b></td></tr>
       <tr><td>Ajustement objectif</td><td>${r0(c.target-c.tdee)} kcal</td></tr>
       <tr><td>Protéines ${c.protPro?"(valeur fixée par ton ou ta professionnel·le)":`: ${String(Math.round(c.pPerKg*10)/10).replace(".",",")} g/kg × ${r0(c.refW)} kg${c.refW_bmi?" (poids de référence, IMC 25)":""}`}</td><td>${r0(c.p)} g</td></tr></table></div>
-      <p class="small" style="margin-top:8px">Ce sont des estimations de départ, à ±10 %. L'onglet Suivi recalcule ta dépense réelle à partir de tes pesées.</p></details>
+      <p class="small" style="margin-top:8px"><button class="btn ghost" data-sheet="sources" style="padding-left:0">Voir les sources de chaque calcul</button></p><p class="small" style="margin-top:8px">Ce sont des estimations de départ, à ±10 %. L'onglet Suivi recalcule ta dépense réelle à partir de tes pesées.</p></details>
   </section>
   <section class="card">
     <h2>De saison en ${MONTHS[m]}</h2>
@@ -1001,7 +1043,7 @@ function viewPlan(){
       <p class="small muted">Références nutritionnelles pour la population adulte (Anses). Elles ne couvrent pas la grossesse, l'allaitement ni les pathologies.</p></div></details>
     <details class="acc" id="d-sport"><summary>Activité : quoi ajuster</summary><div class="body"><ul class="clean">${sportRec.map(x=>`<li>${x}</li>`).join("")}</ul></div></details>
   </section>
-  <p class="small muted">Agni donne des repères généraux, pas un avis médical. En cas de pathologie ou de traitement, vois un médecin ou un diététicien.</p>`;
+  <p class="small muted">Agni donne des repères généraux, pas un avis médical. En cas de pathologie ou de traitement, vois un médecin ou un diététicien. <button class="btn ghost" data-sheet="sources">Sources et méthodes</button></p>`;
 }
 
 const opt=(v,l,cur)=>`<option value="${v}" ${v==cur?"selected":""}>${l}</option>`;
