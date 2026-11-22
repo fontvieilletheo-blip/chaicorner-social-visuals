@@ -561,8 +561,8 @@ const NOVEG=/poulet|poisson|viande|b[oœ]e?uf|porc|thon|saumon|sardine|maquereau
 function forDiet(txt, pr){ pr=pr||prof(); if(!txt||!pr.diet||pr.diet==="omnivore") return txt;
   const bad = x => NOVEG.test(x) || (pr.diet==="vegan" && NOVEGAN.test(x));
   return txt.split(" ; ").map((part,i)=> i ? (bad(part)&&!/compl[ée]ment/.test(part)?"":part) : part.split(", ").filter(x=>!bad(x)).join(", ")).filter(Boolean).join(" ; "); }
-const srcOf = (k,src,pr) => { pr=pr||prof(); if(k==="om3" && pr.diet && pr.diet!=="omnivore") return "pas de source végétale directe hors microalgues : mise sur l'ALA (colza, noix, lin) et parles-en à un professionnel"; return forDiet(src,pr); };
-const DIET_RULE = {vegetarien:" RÈGLE STRICTE : alimentation végétarienne. Aucune viande, aucun poisson, aucun fruit de mer, ni charcuterie, ni gélatine, ni bouillon de viande ou de poisson. Œufs et laitages autorisés.", vegan:" RÈGLE STRICTE : alimentation végétalienne. Aucun produit animal : ni viande, ni poisson, ni œufs, ni laitages, ni miel, ni ghee."};
+const srcOf = (k,src,pr) => { pr=pr||prof(); if(k==="om3" && pr.diet && !/omnivore|flexi/.test(pr.diet)) return "pas de source végétale directe hors microalgues : mise sur l'ALA (colza, noix, lin) et parles-en à un professionnel"; return forDiet(src,pr); };
+const DIET_RULE = {flexi:" RÈGLE : alimentation flexitarienne. Propose des repas végétariens (œufs et laitages autorisés). Viande ou poisson au plus une fois par semaine : n'en propose que si on te le demande.", vegetarien:" RÈGLE STRICTE : alimentation végétarienne. Aucune viande, aucun poisson, aucun fruit de mer, ni charcuterie, ni gélatine, ni bouillon de viande ou de poisson. Œufs et laitages autorisés.", vegan:" RÈGLE STRICTE : alimentation végétalienne. Aucun produit animal : ni viande, ni poisson, ni œufs, ni laitages, ni miel, ni ghee."};
 const protIdeas = pr => { const d=doshaOf(pr); return pr.diet==="vegan" ? "lentilles, pois chiches, tofu, tempeh, seitan" : forDiet(d?DOSHA[d.main].prot:"skyr ou fromage blanc, œufs, lentilles, tofu, poulet, poisson", pr); };
 const EXAMPLE = {sex:"f", age:32, h:168, w:64, bf:"", job:"assis", commute:20, sessions:3, dur:60, intensity:"mod", goal:"perte", pace:"doux", diet:"omnivore", quiz:[], targetW:"", meals:3, fast:"12", notes:"", people:1, example:true};
 
@@ -940,7 +940,7 @@ function viewPlan(){
   sportRec.push(pr.goal==="prise" ? "2 à 3 séances de renforcement par semaine avec charge progressive : sans ce signal, le surplus calorique part en gras." : "Garde 2 séances de renforcement par semaine : elles protègent le muscle pendant que tu ajustes l'alimentation.");
   sportRec.push("Repère OMS : 150 à 300 min d'activité modérée par semaine. Tu en déclares "+r0((+pr.sessions||0)*(+pr.dur||0)+(+pr.commute||0)*7)+" (sport et trajets actifs).");
   const diet = pr.diet==="vegan" ? "Alimentation végétalienne : la vitamine B12 n'existe pas dans les végétaux, un complément est indispensable. Surveille aussi fer, zinc, iode, calcium et oméga-3 (huile de colza, noix, lin)."
-    : pr.diet==="vegetarien" ? "Alimentation végétarienne : surveille le fer (légumineuses avec une source de vitamine C), le zinc, la B12 (œufs, laitages) et les oméga-3 (colza, noix, lin)." : "";
+    : /vegetarien|flexi/.test(pr.diet) ? "Alimentation surtout végétarienne : surveille le fer (légumineuses avec une source de vitamine C), le zinc, la B12 (œufs, laitages) et les oméga-3 (colza, noix, lin)." : "";
   return `${exampleBanner()}
   <section class="card peach">
     <div class="row" style="justify-content:space-between"><h2>Mes cibles par jour</h2><span class="tag">${goalTxt}</span></div>
@@ -1015,7 +1015,7 @@ const SEC = {
       <label class="f">Intensité<select id="p-intensity" data-p="intensity">${opt("leger","Légère",p.intensity)}${opt("mod","Modérée",p.intensity)}${opt("intense","Intense",p.intensity)}</select></label>
     </div>`,
  alim:p=>`<div class="grid2">
-      <label class="f">Régime<select id="p-diet" data-p="diet">${opt("omnivore","Omnivore",p.diet)}${opt("vegetarien","Végétarien",p.diet)}${opt("vegan","Végétalien",p.diet)}</select></label>
+      <label class="f">Régime<select id="p-diet" data-p="diet">${opt("omnivore","Omnivore",p.diet)}${opt("flexi","Flexitarien (surtout végétarien)",p.diet)}${opt("vegetarien","Végétarien",p.diet)}${opt("vegan","Végétalien",p.diet)}</select></label>
       <label class="f">Repas par jour<select id="p-meals" data-p="meals">${opt(2,"2 repas",p.meals)}${opt(3,"3 repas",p.meals)}${opt(4,"3 repas et une collation",p.meals)}</select></label>
     </div>
     <label class="f">Je cuisine en général pour<select id="p-people" data-p="people">${[1,2,3,4,5,6].map(n=>opt(n,n+(n>1?" personnes":" personne (moi)"),p.people||1)).join("")}</select></label>
@@ -1064,7 +1064,7 @@ function viewProfil(){
         ${SEC[key](p,c)}
         <div class="row" style="margin-top:4px"><button class="btn primary" data-step="1">${key==="quiz"&&!d?"Passer":"Continuer"}</button>${i?`<button class="btn ghost" data-step="-1">Retour</button>`:""}</div></section>`;
   }
-  const sum={moi:`${p.sex==="h"?"Homme":"Femme"}, ${p.age} ans, ${p.h} cm, ${p.w} kg`, quot:`${{assis:"Assis",mixte:"Mixte",physique:"Physique"}[p.job]} · ${p.sessions||0} séance${p.sessions>1?"s":""}`, alim:`${{omnivore:"Omnivore",vegetarien:"Végétarien",vegan:"Végétalien"}[p.diet]} · ${FASTS[p.fast||"12"][0]}`, obj:`${{perte:"Perte de gras",maintien:"Maintien",prise:"Prise de muscle"}[p.goal]}${p.targetW?" · "+p.targetW+" kg":""}`, quiz:d?d.label:"À faire"};
+  const sum={moi:`${p.sex==="h"?"Homme":"Femme"}, ${p.age} ans, ${p.h} cm, ${p.w} kg`, quot:`${{assis:"Assis",mixte:"Mixte",physique:"Physique"}[p.job]} · ${p.sessions||0} séance${p.sessions>1?"s":""}`, alim:`${{omnivore:"Omnivore",flexi:"Flexitarien",vegetarien:"Végétarien",vegan:"Végétalien"}[p.diet]} · ${FASTS[p.fast||"12"][0]}`, obj:`${{perte:"Perte de gras",maintien:"Maintien",prise:"Prise de muscle"}[p.goal]}${p.targetW?" · "+p.targetW+" kg":""}`, quiz:d?d.label:"À faire"};
   return `<section class="card peach"><div class="withillu">${ILLU.bowl.replace('class="illu"','class="illu sm"')}<div><h2>Mon diagnostic</h2><p class="small">${esc(sum.obj)}</p></div></div>${SEC.res(p,c)}</section>
   <section class="plain">
     ${[["moi","Moi"],["quot","Mon quotidien"],["alim","Mon alimentation"],["obj","Mon objectif"],["quiz","Ma constitution ayurvédique"]].map(([k,l])=>`<details class="acc" id="d-p-${k}"><summary>${l}<span>${esc(sum[k])}</span></summary><div class="body">${SEC[k](p,c)}</div></details>`).join("")}
@@ -1143,7 +1143,7 @@ async function shrink(file){
     return await new Promise(r=>cv.toBlob(b=>r(b||file),"image/jpeg",0.85)); }catch(e){ return file; }
 }
 function context(){ const pr=prof(), c=compute(pr), m=new Date().getMonth(), d=doshaOf(pr), ritu=RITU(m), f=FASTS[pr.fast||"12"];
-  return `Profil : ${pr.sex==="h"?"homme":"femme"}, ${pr.age} ans, ${pr.w} kg, alimentation ${{omnivore:"omnivore",vegetarien:"végétarienne",vegan:"végétalienne"}[pr.diet]||"omnivore"}, objectif ${pr.goal}, ${mealPlan(pr).length} prises alimentaires par jour${f[1]?", fenêtre alimentaire "+f[1]:""}.${pr.notes?" Contraintes et habitudes : "+String(pr.notes).slice(0,300)+".":""} Cibles du jour : ${r0(c.target)} kcal, ${r0(c.p)} g protéines, ${r0(c.c)} g glucides, ${r0(c.l)} g lipides, ${r0(c.fiber)} g fibres. Mois : ${MONTHS[m]} en France. Légumes de saison : ${SEASON[m][0]}. Fruits de saison : ${SEASON[m][1]}. Ayurveda : saison ${ritu.d}${d?", constitution dominante "+d.label:""}.${DIET_RULE[pr.diet]||""}`; }
+  return `Profil : ${pr.sex==="h"?"homme":"femme"}, ${pr.age} ans, ${pr.w} kg, alimentation ${{omnivore:"omnivore",flexi:"flexitarienne",vegetarien:"végétarienne",vegan:"végétalienne"}[pr.diet]||"omnivore"}, objectif ${pr.goal}, ${mealPlan(pr).length} prises alimentaires par jour${f[1]?", fenêtre alimentaire "+f[1]:""}.${pr.notes?" Contraintes et habitudes : "+String(pr.notes).slice(0,300)+".":""} Cibles du jour : ${r0(c.target)} kcal, ${r0(c.p)} g protéines, ${r0(c.c)} g glucides, ${r0(c.l)} g lipides, ${r0(c.fiber)} g fibres. Mois : ${MONTHS[m]} en France. Légumes de saison : ${SEASON[m][0]}. Fruits de saison : ${SEASON[m][1]}. Ayurveda : saison ${ritu.d}${d?", constitution dominante "+d.label:""}.${DIET_RULE[pr.diet]||""}`; }
 async function askPlan(){
   S.planText="Claude réfléchit…"; S.note=""; render();
   const mp=mealPlan(prof()).map(m=>m[0]).join(", ");
