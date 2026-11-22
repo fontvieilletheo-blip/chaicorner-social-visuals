@@ -28,12 +28,12 @@ python3 tools/build_ciqual.py CIQUAL2025_FR_2025_11_03.csv ciqual.json
 Le site est statique, plus une fonction serveur pour Claude. Le montage prévu est Cloudflare Pages.
 
 1. Cloudflare > Workers & Pages > Create > Pages > Connect to Git, choisir ce dépôt.
-2. Root directory : `nutrition`. Build command : vide. Output directory : `/`.
+2. Production branch : `ccr-ad544a2d-lh3h2s` (la branche de travail, pas besoin de fusionner dans `main`). Root directory : `nutrition`. Build command : vide. Output directory : `/`.
 3. Settings > Environment variables, en secrets :
    - `ANTHROPIC_API_KEY` : clé de l'API Claude ;
    - `APP_CODE` : code d'accès à donner aux testeurs (ils le saisissent dans Profil) ;
    - `CLAUDE_MODEL` (facultatif).
-4. Custom domains > ajouter le sous-domaine (par exemple `agni.chaicorner.fr`), puis créer chez le gestionnaire DNS du domaine l'enregistrement CNAME indiqué par Cloudflare.
+4. Custom domains > ajouter `agni.chaicorner.fr`, puis créer chez le gestionnaire DNS de chaicorner.fr l'enregistrement indiqué par Cloudflare : type CNAME, nom `agni`, cible `<nom-du-projet>.pages.dev`.
 
 Sans `ANTHROPIC_API_KEY`, tout fonctionne sauf les trois boutons Claude, qui restent masqués.
 
