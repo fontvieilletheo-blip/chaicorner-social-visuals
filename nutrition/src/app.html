@@ -428,15 +428,21 @@ function compute(pr){
   let target = tdee*(1+adjPct);
   if (target<bmr) target=bmr;
   const bmi = h ? w/Math.pow(h/100,2) : 0;
-  const refW = bmi>27 ? 25*Math.pow(h/100,2) : w;
-  const pPerKg = pr.goal==="perte"?2 : pr.goal==="prise"?1.8 : 1.6;
-  const p = pPerKg*refW;
+  // Poids de référence : au-delà d'un IMC de 25, celui qui correspond à un IMC de 25 (la masse grasse en plus ne demande pas de protéines).
+  const refW = (h && bmi>25) ? 25*Math.pow(h/100,2) : w;
+  // g/kg de poids de référence : 0,83 = référence Anses pour l'adulte ; on monte un peu pour préserver le muscle en perte de poids
+  // ou en prise de muscle, et selon le volume d'entraînement. Plafond 1,6 g/kg, au-delà rien n'est démontré hors sport de haut niveau.
+  const train = (+pr.sessions||0)*(+pr.dur||0)/60;               // heures de sport par semaine
+  const pBase = pr.goal==="perte"?1.2 : pr.goal==="prise"?1.4 : 1.0;
+  const pPerKg = Math.min(1.6, pBase + (train>=4?0.2:train>=2?0.1:0));
+  const protPro = +pr.protG>0 ? +pr.protG : 0;                     // valeur fixée par un professionnel
+  const p = protPro || pPerKg*refW;
   const l = Math.max(0.8*refW, target*0.30/9);
   const c = Math.max(0,(target-p*4-l*9)/4);
   const weekly = (target-tdee)*7/7700;
   const tw=+pr.targetW||0; let weeks=null;
   if(tw && weekly && Math.sign(tw-w)===Math.sign(weekly)) weeks=Math.ceil((tw-w)/weekly);
-  return {bmr, base, commute, sport, tdee, target, p, l, c, fiber: Math.max(25, target/1000*14), bmi, pPerKg, refW, weekly, weeks, dayBase: base+commute, formula: base+commute+sport, water: pr.sex==="h"?2000:1600};
+  return {protPro, refW_bmi:h&&bmi>25, bmr, base, commute, sport, tdee, target, p, l, c, fiber: Math.max(25, target/1000*14), bmi, pPerKg, refW, weekly, weeks, dayBase: base+commute, formula: base+commute+sport, water: pr.sex==="h"?2000:1600};
 }
 // Références nutritionnelles pour la population adulte (Anses, 2021) ; [valeur, "min" à atteindre | "max" à ne pas dépasser]
 function refs(pr,c){
@@ -762,7 +768,7 @@ function viewPlan(){
       <tr><td>Sport, lissé sur la semaine</td><td>+ ${r0(c.sport)} kcal</td></tr>
       <tr><td><b>Dépense totale ${+pr.tdeeReal?"mesurée sur tes pesées":"estimée"}</b></td><td><b>${r0(c.tdee)} kcal</b></td></tr>
       <tr><td>Ajustement objectif</td><td>${r0(c.target-c.tdee)} kcal</td></tr>
-      <tr><td>Protéines</td><td>${c.pPerKg} g/kg</td></tr></table></div>
+      <tr><td>Protéines ${c.protPro?"(valeur fixée par ton ou ta professionnel·le)":`: ${String(Math.round(c.pPerKg*10)/10).replace(".",",")} g/kg × ${r0(c.refW)} kg${c.refW_bmi?" (poids de référence, IMC 25)":""}`}</td><td>${r0(c.p)} g</td></tr></table></div>
       <p class="small" style="margin-top:8px">Ce sont des estimations de départ, à ±10 %. L'onglet Suivi recalcule ta dépense réelle à partir de tes pesées.</p></details>
   </section>
   <section class="card">
@@ -832,6 +838,7 @@ const SEC = {
       <label class="f">Rythme<select id="p-pace" data-p="pace">${opt("doux","Progressif",p.pace)}${opt("soutenu","Soutenu",p.pace)}</select></label>
     </div>
     <label class="f">Poids visé (kg) <span class="hint">facultatif</span><input id="p-targetW" data-p="targetW" type="text" inputmode="decimal" step="0.1" value="${p.targetW||""}"></label>
+    <label class="f">Protéines conseillées par ta ou ton nutritionniste (g par jour) <span class="hint">facultatif : remplace le calcul automatique</span><input id="p-protG" data-p="protG" type="text" inputmode="decimal" value="${p.protG||""}"></label>
     ${c.weeks?`<p class="small muted num">À ce rythme, ${p.targetW} kg dans ${c.weeks} semaine${c.weeks>1?"s":""} environ.</p>`:(+p.targetW&&p.goal!=="maintien"?`<p class="small muted">Le poids visé ne va pas dans le sens de l'objectif choisi.</p>`:"")}`,
  quiz:p=>{ const d=doshaOf(p); return `<p class="small muted">Réponds selon ta tendance de toujours, pas selon ton état du moment.</p>
     ${QUIZ.map(([q,as],i)=>`<div><h3>${q}</h3><div class="chips" style="margin-top:6px">${as.map((a,j)=>`<button class="chip" data-quiz="${i}:${j}" aria-pressed="${(p.quiz||[])[i]===j}">${a}</button>`).join("")}</div></div>`).join("")}
@@ -1065,7 +1072,7 @@ document.addEventListener("click", e=>{
     if(store.col){ store.col.doc("profile").delete().catch(()=>{}); store.col.doc("favs").delete().catch(()=>{}); keys.forEach(k=>store.col.doc("d-"+k).delete().catch(()=>{})); }
     S.note="Données effacées."; return render(); }
 });
-const NUMP = new Set(["age","h","w","bf","commute","sessions","dur","targetW"]);
+const NUMP = new Set(["age","h","w","bf","commute","sessions","dur","targetW","protG"]);
 document.addEventListener("input", e=>{
   const el=e.target;
   if(el.id==="draft"){ S.draft=el.value; return; }
