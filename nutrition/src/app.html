@@ -129,11 +129,29 @@ details[open] summary{margin-bottom:10px}
 .advice{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;background:var(--cream);border-radius:var(--r);padding:12px;color:var(--ink)}
 .advice .ic{color:var(--amber-dark);margin-top:1px}
 .advice button{justify-self:start;grid-column:2}
-.slot-h{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--teal)}
+.slot-h{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--teal)}
 .slot-h .sl{display:flex;align-items:center;gap:8px;color:var(--ink);font-weight:500;font-size:17px}
 .slot-h .sl .ic{color:var(--teal-light)}
 .add{width:40px;height:40px;border:1px solid var(--teal);border-radius:var(--r);background:#fff;color:var(--teal);display:grid;place-items:center}
 .add:focus-visible,.tile:focus-visible{outline:2px solid var(--amber-dark);outline-offset:2px}
+.sh-act{display:flex;gap:2px}
+.icb{width:34px;height:34px;border:none;background:transparent;color:var(--teal-light);border-radius:var(--r);display:grid;place-items:center}
+.icb .ic{width:18px;height:18px}
+.icb.on{color:var(--amber)}
+.icb:focus-visible{outline:2px solid var(--amber-dark);outline-offset:2px}
+.favs{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.favs::-webkit-scrollbar{display:none}
+.fav{flex:none;max-width:200px;border:1px solid var(--teal);border-radius:var(--r);background:#fff;color:var(--teal);padding:8px 10px;text-align:left;display:flex;flex-direction:column;gap:2px;min-height:52px}
+.fav b{font-weight:500;color:var(--ink);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.fav span{font-size:12px;color:var(--muted)}
+.fav.del{border-color:var(--warn)}
+.fav.del span{color:var(--warn)}
+.fav:focus-visible{outline:2px solid var(--amber-dark);outline-offset:2px}
+.hero-empty .favs{justify-content:center;flex-wrap:wrap;overflow:visible}
+.foyer-row{display:grid;grid-template-columns:1fr auto 34px;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--sand-2)}
+.foyer-row b{display:block;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.foyer-row > div{min-width:0}
+.code{font-size:28px;font-weight:600;letter-spacing:.18em;color:var(--ink);font-variant-numeric:tabular-nums;user-select:all}
 .slot .none{font-size:13.5px;color:var(--muted);padding:8px 0 4px}
 .item{grid-template-columns:30px 1fr 70px 34px}
 .item .n b,.item .n span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
@@ -327,6 +345,9 @@ const I = {
  spark:svg('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16v4M17 18h4"/>'),
  plus:svg('<path d="M12 5v14M5 12h14"/>'),
  close:svg('<path d="M6 6l12 12M18 6L6 18"/>'),
+ star:svg('<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>'),
+ starOn:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+ home:svg('<path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-5h4v5"/>'),
  mic:svg('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>') };
 // Illustrations de marque (aplats de la charte Chaï Corner)
 const ILLU = {
@@ -486,13 +507,13 @@ const parseText = t => splitMeal(t).map(parseLine);
 const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const today = () => iso(new Date());
 const addDays = (d,n) => { const x=new Date(d+"T12:00:00"); x.setDate(x.getDate()+n); return iso(x); };
-const S = {profile:null, days:{}, date:today(), tab:"journal", slot:null, draft:"", q:"", busy:"", note:"", advice:"", planText:"", draftProfile:null, confirmReset:false, off:[], offq:"", sheet:null, step:0};
+const S = {profile:null, days:{}, date:today(), tab:"journal", slot:null, draft:"", q:"", busy:"", note:"", advice:"", planText:"", draftProfile:null, confirmReset:false, off:[], offq:"", sheet:null, step:0, favs:[], favEdit:false};
 const STANDALONE = !(window.claude && window.claude.use);
 const store = { col:null, timers:{}, chain:{},
   get(k){ try{ return JSON.parse(localStorage.getItem("agni:"+k)); }catch(e){ return null } },
   put(k,v){ try{ localStorage.setItem("agni:"+k, JSON.stringify(v)); }catch(e){} },
   save(k,v){
-    if(k==="profile") this.put("profile",v); else this.put("days",S.days);
+    if(k==="profile"||k==="favs") this.put(k,v); else this.put("days",S.days);
     if(!this.col) return;
     clearTimeout(this.timers[k]);
     this.timers[k]=setTimeout(()=>{ const body=JSON.parse(JSON.stringify(v));
@@ -503,6 +524,33 @@ function fixDay(D){ D.meals=(D.meals||[]).map(m=>{ if(!m.n){ const n=new Array(N
 const day = (d=S.date) => S.days[d] || (S.days[d]={meals:[],acts:[]});
 const saveDay = (d=S.date) => store.save("d-"+d, S.days[d]);
 const prof = () => S.profile || EXAMPLE;
+/* ---------- Mes repas (favoris) ---------- */
+const saveFavs = () => store.save("favs", {list:S.favs});
+const favSig = items => items.map(m=>m.name+"|"+m.g).sort().join(";");
+const favName = items => { const ns=items.map(m=>shortName(m.name)[0]); return ns.slice(0,2).join(" + ")+(ns.length>2?" …":""); };
+const favKcal = f => f.items.reduce((a,m)=>a+(m.n[0]||0),0);
+const sortedFavs = slot => S.favs.slice().sort((a,b)=>((b.slot===slot)-(a.slot===slot))||((b.used||0)-(a.used||0)));
+const favChips = (list, del) => `<div class="favs">${list.map(f=>`<button class="fav ${del?"del":""}" data-${del?"delfav":"fav"}="${f.id}"><b>${esc(f.name)}</b><span>${del?"Retirer":`${r0(favKcal(f))} kcal · ${f.items.length} aliment${f.items.length>1?"s":""}`}</span></button>`).join("")}</div>`;
+const isFav = items => { const sg=favSig(items); return S.favs.some(f=>f.sig===sg); };
+/* ---------- Foyer : repas partagés entre profils (version Claude) ---------- */
+const FOYER = {db:null, uid:null, col:null, unsub:null, meals:[]};
+const CODE_RE=/^[A-HJ-NP-Z2-9]{6}$/;
+const cleanN = n => { const a=Array.isArray(n)?n.slice(0,NKEYS):[]; while(a.length<NKEYS) a.push(null); return a.map(v=>typeof v==="number"&&isFinite(v)&&v>=0?v:null); };
+function cleanDish(d){ const items=(Array.isArray(d.items)?d.items:[]).slice(0,30).map(m=>({name:String(m&&m.name||"Aliment").slice(0,90), g:Math.max(0,Math.round(num(m&&m.g))), n:cleanN(m&&m.n), gi:Number.isInteger(m&&m.gi)?m.gi:null, src:"foyer"})).filter(m=>m.g>0);
+  return {id:d.id, date:String(d.date||""), slot:SLOTS.some(x=>x[0]===d.slot)?d.slot:"midi", by:String(d.by||""), parts:Math.max(1,Math.min(12,Math.round(num(d.parts))||1)), title:String(d.title||favName(items)).slice(0,90), items, at:num(d.at)}; }
+function foyerSub(){
+  if(FOYER.unsub){ try{ FOYER.unsub(); }catch(e){} FOYER.unsub=null; } FOYER.col=null; FOYER.meals=[];
+  const code=S.profile&&S.profile.foyer; if(!FOYER.db||!code||!CODE_RE.test(code)) return;
+  FOYER.col=FOYER.db.collection("foyers/"+code+"/meals");
+  FOYER.unsub=FOYER.col.onSnapshot(snap=>{ FOYER.meals=snap.docs.map(d=>cleanDish({id:d.id,...d.data()}));
+    const old=addDays(today(),-3); for(const m of FOYER.meals) if(m.by===FOYER.uid && m.date<old) FOYER.col.doc(m.id).delete().catch(()=>{});
+    softRender(); }, ()=>{});
+}
+function postFoyer(items, parts, slot){ if(!FOYER.col) return false; const its=items.filter(m=>!m.unknown); if(!its.length) return false;
+  const id=Date.now().toString(36)+uid();
+  FOYER.col.doc(id).set({date:S.date, slot:slot||curSlot(), by:FOYER.uid, parts, at:Date.now(), title:favName(its), items:its.map(m=>({name:m.name, g:m.g, n:m.n.map(v=>v==null?null:Math.round(v*1000)/1000), gi:m.gi==null?null:m.gi}))}).catch(()=>{ S.note="Le partage avec ton foyer n'a pas abouti."; softRender(); });
+  return true; }
+const foyerToday = () => { const D=S.days[S.date]||{}; const done=new Set(D.imported||[]); return FOYER.meals.filter(m=>m.date===S.date && m.by!==FOYER.uid && !done.has(m.id)).sort((a,b)=>a.at-b.at); };
 const ppl = () => Math.max(1, Math.min(8, +(S.people!=null?S.people:prof().people)||1));
 const pplChip = () => { const n=ppl(); return `<button class="chip" data-act="people" aria-label="Changer le nombre de personnes">${I.person}Pour ${n} personne${n>1?"s":""}</button>`; };
 const pplClause = n => n>1 ? ` Je cuisine pour ${n} personnes : donne d'abord les quantités à préparer pour ${n} (ingrédients crus, faciles à acheter), puis une ligne « Ta part » avec mes grammes dans l'assiette et mes kcal · P · G · L, calculés sur mes cibles.` : " Quantités pour une seule personne.";
@@ -556,7 +604,8 @@ function viewJournal(){
   const pct=Math.min(1,t.kcal/c.target), RR=56, C=2*Math.PI*RR, over=t.kcal>c.target*1.03;
   const spent=c.dayBase+t.act, bal=t.kcal-spent, slot=curSlot(), yest=S.days[addDays(S.date,-1)];
   const slots = SLOTS.map(([k,lab,icn])=>{ const its=D.meals.filter(m=>m.slot===k); if(!its.length) return "";
-    return `<div class="slot"><div class="slot-h"><span class="sl">${I[icn]}${lab}</span><span class="small num muted">${r0(its.reduce((a,m)=>a+(m.n[0]||0),0))} kcal</span></div>`+
+    const ok=its.filter(m=>!m.unknown), fav=ok.length&&isFav(ok);
+    return `<div class="slot"><div class="slot-h"><span class="sl">${I[icn]}${lab}</span><span class="small num muted">${r0(its.reduce((a,m)=>a+(m.n[0]||0),0))} kcal</span><span class="sh-act">${ok.length?`<button class="icb ${fav?"on":""}" data-favslot="${k}" aria-pressed="${!!fav}" aria-label="${fav?"Déjà dans Mes repas":"Enregistrer ce repas dans Mes repas"}">${fav?I.starOn:I.star}</button>`:""}${FOYER.col&&ok.length?`<button class="icb" data-shareslot="${k}" aria-label="Partager ce repas avec mon foyer">${I.home}</button>`:""}</span></div>`+
       its.map(m=>{ const [nm,rest]=shortName(m.name); return `<div class="item ${m.unknown?"unknown":""} ${S.fresh&&S.fresh.has(m.id)?"fresh":""}"><span class="gi">${itemIcon(m)}</span><div class="n"><b>${esc(nm)}</b><span>${m.unknown?"Non reconnu":`${r0(m.n[0])} kcal${rest?" · "+esc(rest):""}`}${m.src==="ia"?" · estimé":""}</span></div>
       <input type="text" inputmode="decimal" id="g-${m.id}" data-g="${m.id}" value="${m.g}" aria-label="Grammes de ${esc(m.name)}"><button class="x" data-del="${m.id}" aria-label="Supprimer ${esc(m.name)}">×</button></div>`; }).join("")+`</div>`; }).join("");
   const glasses=D.water||0, missing=Math.max(...MICROS.flatMap(g=>g[1]).map(x=>KI[x[0]]!=null?t.miss[KI[x[0]]]:0),0);
@@ -565,8 +614,8 @@ function viewJournal(){
   <div class="datebar"><button data-day="-1" aria-label="Jour précédent">‹</button><div class="d">${fmtDate(S.date)}</div><button data-day="1" aria-label="Jour suivant" ${S.date>=today()?"disabled":""}>›</button></div>
   <section class="card peach">
     <div class="summary">
-      <div class="ring"><svg viewBox="0 0 132 132"><circle cx="66" cy="66" r="${RR}" fill="none" stroke="#fff" stroke-width="12"/><circle cx="66" cy="66" r="${RR}" fill="none" stroke="var(${over?"--warn":"--teal"})" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C}" data-dash="${C*(1-pct)}" data-full="${C}" data-k="ring" style="stroke-dashoffset:${C*(1-pct)}"/></svg>
-        <div class="c"><span class="big" data-count="${r0(Math.abs(c.target-t.kcal))}" data-k="left">${r0(Math.abs(c.target-t.kcal))}</span><span class="small num">kcal ${t.kcal>c.target?"en trop":"restantes"}</span></div></div>
+      <div class="ring"><svg viewBox="0 0 132 132"><circle cx="66" cy="66" r="${RR}" fill="none" stroke="#fff" stroke-width="12"/><circle cx="66" cy="66" r="${RR}" fill="none" stroke="var(${over?"--amber":"--teal"})" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C}" data-dash="${C*(1-pct)}" data-full="${C}" data-k="ring" style="stroke-dashoffset:${C*(1-pct)}"/></svg>
+        <div class="c"><span class="big" data-count="${Math.round(Math.abs(c.target-t.kcal)/10)*10}" data-k="left">${Math.round(Math.abs(c.target-t.kcal)/10)*10}</span><span class="small num">≈ kcal ${t.kcal>c.target?"au-delà":"restantes"}</span></div></div>
       <div class="bars">${bar("Protéines",t.p,c.p,"--prot")}${bar("Glucides",t.c,c.c,"--carb")}${bar("Lipides",t.l,c.l,"--fat")}</div>
     </div>
     ${D.meals.length?`<details class="mini" id="d-bilan"><summary>Bilan du jour</summary>
@@ -574,9 +623,12 @@ function viewJournal(){
   </section>
   ${S.busy||S.note?`<div class="toast" role="status">${esc(S.busy||S.note)}</div>`:""}
   ${D.meals.length?`<div class="advice">${I.spark}<p>${esc(ruleAdvice(t,c))}</p>${S.advice?`<div class="out" style="grid-column:2">${esc(S.advice)}</div>`:""}${AI.ok?`<div class="row" style="grid-column:2"><button class="btn ghost" data-act="advice">Une idée pour le prochain repas</button>${pplChip()}</div>`:""}</div>
+  ${foyerCard()}
   <section class="plain">${slots}<button class="addrow" data-addslot="${slot}">${I.plus}Ajouter un repas</button></section>`
   :`<section class="card"><div class="hero-empty">${ILLU.empty}<h2>Qu'as-tu mangé ${S.date===today()?"aujourd'hui":"ce jour-là"} ?</h2>
-    <div class="row" style="justify-content:center"><button class="btn primary" data-addslot="${slot}">Ajouter un repas</button>${yest&&yest.meals.length?`<button class="btn" data-act="copyday">Comme hier</button>`:""}</div></div></section>`}
+    ${S.favs.length?favChips(sortedFavs(slot).slice(0,3)):""}
+    <div class="row" style="justify-content:center"><button class="btn primary" data-addslot="${slot}">Ajouter un repas</button>${yest&&yest.meals.length?`<button class="btn" data-act="copyday">Comme hier</button>`:""}</div></div></section>
+  ${foyerCard()}`}
   <div class="tiles">
     <button class="tile" data-sheet="water">${I.drop}<b>${(glasses*0.25).toFixed(2).replace(".",",")} L</b><span>Eau</span></button>
     <button class="tile" data-sheet="act">${I.pulse}<b>${r0(t.act)} kcal</b><span>Activité</span></button>
@@ -590,6 +642,9 @@ function viewJournal(){
   </section>
   `:""}`;
 }
+function foyerCard(){ const list=foyerToday(); if(!list.length) return "";
+  return `<section class="card cream"><h3>${I.home} Partagé par ton foyer</h3>${list.map(m=>{ const k=m.items.reduce((a,x)=>a+(x.n[0]||0),0)/m.parts;
+    return `<div class="foyer-row"><div><b>${esc(m.title)}</b><span class="small muted num">${m.parts>1?`Plat pour ${m.parts} · `:""}ta part ≈ ${r0(k/10)*10} kcal</span></div><button class="btn" data-foyeradd="${esc(m.id)}" aria-label="Ajouter ma part de ${esc(m.title)}">Ajouter</button><button class="x" data-foyerskip="${esc(m.id)}" aria-label="Ignorer">×</button></div>`; }).join("")}</section>`; }
 function sugBox(){ const sug=S.q?suggest(S.q):[], rec=recents();
   return (sug.length?`<div class="sugs">${sug.map(s=>{ const [nm,rest]=shortName(DB.foods[s.i][0]); return `<button class="sug" data-pick="${s.i}" data-u="${s.u}"><span class="nm"><span class="gi">${I[gIcon(DB.foods[s.i][1])]}</span><span>${esc(nm)}${rest?`<span class="small muted"> · ${esc(rest)}</span>`:""}</span></span><span>${s.u} g · ${r0(DB.foods[s.i][2][0]*s.u/100)} kcal</span></button>`; }).join("")}</div>`:(S.q&&DB.ready?`<p class="empty">Aucun aliment trouvé pour « ${esc(S.q)} ».</p>`:""))
     + (!S.q&&rec.length?`<div><h3>Récents</h3><div class="chips" style="margin-top:6px">${rec.map((m,i)=>`<button class="chip" data-recent="${i}">${esc(shortName(m.name)[0])} · ${m.g} g</button>`).join("")}</div></div>`:""); }
@@ -598,12 +653,13 @@ function viewSheet(){
   const pr=prof(), c=compute(pr), D=S.days[S.date]||{meals:[],acts:[]}; let title="", body="";
   if(S.sheet==="add"){ const slot=curSlot(); title="Ajouter un repas";
     body=`<div class="chips" role="group" aria-label="Moment">${SLOTS.map(([k,l])=>`<button class="chip" data-slot="${k}" aria-pressed="${k===slot}">${l}</button>`).join("")}</div>
+    ${S.favs.length?`<div><div class="row" style="justify-content:space-between"><h3>Mes repas</h3><button class="btn ghost" data-act="favedit">${S.favEdit?"Terminé":"Gérer"}</button></div>${favChips(sortedFavs(slot), S.favEdit)}</div>`:""}
     <div class="field-ic">${I.search}<input id="q" type="search" autocomplete="off" placeholder="${DB.ready?"Chercher parmi "+DB.foods.length+" aliments":DB.failed?"Table indisponible : recharge la page":"Chargement de la table…"}" value="${esc(S.q)}" aria-label="Chercher un aliment"></div>
     <div id="sugbox">${sugBox()}</div>
     <div class="sep">ou</div>
     <div class="draftbox"><textarea id="draft" aria-label="Décris tout le repas" placeholder="Décris ou dicte ton repas : 150 g de riz basmati, 2 œufs, une pomme">${esc(S.draft)}</textarea>
       <button class="btn sq mic ${Mic.on?"rec":""}" id="mic" data-act="mic" aria-pressed="${Mic.on}" aria-label="Dicter le repas" ${Mic.ok?"":"hidden"}>${I.mic}</button></div>
-    <div><button class="chip" data-act="share" aria-pressed="${(S.share||1)>1}">${(S.share||1)>1?`Plat pour ${S.share} : je compte une part`:"C'est un plat à partager ?"}</button></div>
+    <div><button class="chip" data-act="share" aria-pressed="${(S.share||1)>1}">${(S.share||1)>1?`Plat pour ${S.share} : je compte une part${FOYER.col?" et je le partage avec mon foyer":""}`:"C'est un plat à partager ?"}</button></div>
     <div class="row"><button class="btn primary" data-act="add" ${DB.ready?"":"disabled"}>Ajouter</button>
       <button class="btn" data-act="ia" ${AI.ok?"":"hidden"}>${I.spark}Estimer</button>
       <button class="btn sq" data-act="photo" aria-label="Photo du plat" ${AI.img?"":"hidden"}>${I.camera}</button></div>
@@ -788,6 +844,14 @@ function viewProfil(){
   const c=compute(p), d=doshaOf(p);
   const foot=`${AI.needsCode?`<section class="card"><h2>Code d'accès</h2><p class="small muted">Il active l'estimation par photo et les idées de repas sur cet appareil.</p>
     <div class="row"><div class="grow"><input id="code" type="password" autocomplete="off" placeholder="Code reçu" value="${esc(AI.code||"")}" aria-label="Code d'accès"></div><button class="btn" data-act="code">Valider</button></div></section>`:""}
+  ${FOYER.db?`<section class="card"><div class="row" style="justify-content:space-between"><h2>Mon foyer</h2>${I.home}</div>
+    ${S.profile&&S.profile.foyer?`<p class="small muted">Donne ce code à la personne avec qui tu cuisines. Un plat partagé par l'un apparaît chez l'autre, qui ajoute sa part en un geste.</p>
+      <div class="row"><span class="code" id="foyercode-v">${esc(S.profile.foyer)}</span><button class="btn" data-act="foyer-copy">Copier</button></div>
+      <div><button class="btn ghost" data-act="foyer-leave">Quitter le foyer</button></div>`
+    :S.profile?`<p class="small muted">Tu cuisines avec quelqu'un qui utilise aussi Agni ? Reliez vos profils : un plat saisi par l'un se retrouve chez l'autre.</p>
+      <div class="row"><button class="btn primary" data-act="foyer-create">Créer un foyer</button></div>
+      <div class="row"><div class="grow"><input id="foyerjoin" type="text" autocomplete="off" autocapitalize="characters" maxlength="6" placeholder="Code reçu" aria-label="Code du foyer à rejoindre"></div><button class="btn" data-act="foyer-join">Rejoindre</button></div>`:""}
+  </section>`:""}
   <section class="plain">
     <p class="small muted">${store.col?"Tes données sont rangées dans ton espace personnel de cette page, invisible pour les autres.":"Tes données restent sur cet appareil : rien n'est envoyé à un serveur, sauf le texte ou la photo d'un repas quand tu demandes une estimation."}</p>
     ${STANDALONE?`<div class="row"><button class="btn" data-act="export">Sauvegarder mes données</button><label class="btn" style="display:inline-flex;align-items:center">Restaurer<input type="file" id="import" accept="application/json" hidden></label></div>`:""}
@@ -935,7 +999,7 @@ async function offSearch(){
 }
 
 /* ================= Actions ================= */
-const myShare = items => { const n=S.share||1; S.share=1; return n>1 ? items.map(it=>({...it, g:Math.round(it.g/n), n:it.n.map(v=>v==null?null:v/n)})) : items; };
+const myShare = items => { const n=S.share||1; S.share=1; if(n>1) postFoyer(items,n,curSlot()); return n>1 ? items.map(it=>({...it, g:Math.round(it.g/n), n:it.n.map(v=>v==null?null:v/n)})) : items; };
 function addItems(items){ const slot=curSlot(), D=day(); S.fresh=new Set(); for(const it of items){ const id=uid(); S.fresh.add(id); D.meals.push({id, slot, ...it}); } saveDay(); Mic.stop(); }
 document.addEventListener("click", e=>{
   if(e.target.closest("[data-close]")) return closeSheet();
@@ -953,7 +1017,26 @@ document.addEventListener("click", e=>{
   if(b.dataset.del){ const D=day(); D.meals=D.meals.filter(m=>m.id!==b.dataset.del); saveDay(); return render(); }
   if(b.dataset.delact){ const D=day(); D.acts=D.acts.filter(m=>m.id!==b.dataset.delact); saveDay(); return render(); }
   if(b.dataset.quiz){ const [i,j]=b.dataset.quiz.split(":").map(Number); const p=S.draftProfile; p.quiz=p.quiz||[]; p.quiz[i]=j; for(let k=0;k<QUIZ.length;k++) if(p.quiz[k]===undefined) p.quiz[k]=null; return render(); }
+  if(b.dataset.fav){ const f=S.favs.find(x=>x.id===b.dataset.fav); if(!f) return; addItems(f.items.map(m=>({...m, n:m.n.slice()}))); f.used=Date.now(); saveFavs(); S.sheet=null; S.q=""; S.note=`« ${f.name} » ajouté. Ajuste les grammes si besoin.`; return render(); }
+  if(b.dataset.delfav){ S.favs=S.favs.filter(x=>x.id!==b.dataset.delfav); saveFavs(); if(!S.favs.length) S.favEdit=false; return render(); }
+  if(b.dataset.favslot){ const its=day().meals.filter(m=>m.slot===b.dataset.favslot && !m.unknown); if(!its.length) return;
+    const sg=favSig(its), ex=S.favs.find(f=>f.sig===sg);
+    if(ex){ S.favs=S.favs.filter(f=>f!==ex); S.note=`« ${ex.name} » retiré de Mes repas.`; }
+    else { const f={id:uid(), name:favName(its), slot:b.dataset.favslot, sig:sg, used:Date.now(), items:its.map(m=>({name:m.name, g:m.g, n:m.n.slice(), src:m.src, gi:m.gi}))}; S.favs.unshift(f); S.favs=S.favs.slice(0,24); S.note=`« ${f.name} » enregistré dans Mes repas : il s'ajoutera en un geste.`; }
+    saveFavs(); return render(); }
+  if(b.dataset.shareslot){ const its=day().meals.filter(m=>m.slot===b.dataset.shareslot); S.note=postFoyer(its,1,b.dataset.shareslot)?"Repas partagé avec ton foyer.":"Rien à partager."; return render(); }
+  if(b.dataset.foyeradd){ const m=foyerToday().find(x=>x.id===b.dataset.foyeradd); if(!m) return; const D=day(); D.imported=(D.imported||[]).concat(m.id);
+    const keep=S.slot; S.slot=m.slot; addItems(m.items.map(x=>({name:x.name, g:Math.round(x.g/m.parts), n:x.n.map(v=>v==null?null:v/m.parts), src:"foyer", gi:x.gi}))); S.slot=keep;
+    S.note=`Ta part de « ${m.title} » est ajoutée. Ajuste les grammes si ta portion est différente.`; return render(); }
+  if(b.dataset.foyerskip){ const D=day(); D.imported=(D.imported||[]).concat(b.dataset.foyerskip); saveDay(); return render(); }
   const a=b.dataset.act; if(!a) return;
+  if(a==="favedit"){ S.favEdit=!S.favEdit; return render(); }
+  if(a==="foyer-create"||a==="foyer-join"){ if(!S.profile) return; let code;
+    if(a==="foyer-create"){ const A="ABCDEFGHJKMNPQRSTUVWXYZ23456789", r=crypto.getRandomValues(new Uint32Array(6)); code=[...r].map(x=>A[x%A.length]).join(""); }
+    else { code=($("#foyerjoin").value||"").toUpperCase().replace(/[^A-Z0-9]/g,""); if(!CODE_RE.test(code)){ S.note="Ce code ne ressemble pas à un code de foyer : 6 lettres ou chiffres."; return render(); } }
+    S.profile.foyer=code; store.save("profile",S.profile); S.draftProfile=null; foyerSub(); S.note=a==="foyer-create"?"Foyer créé : partage le code.":"Tu as rejoint le foyer."; return render(); }
+  if(a==="foyer-leave"){ delete S.profile.foyer; store.save("profile",S.profile); S.draftProfile=null; foyerSub(); S.note="Tu as quitté le foyer."; return render(); }
+  if(a==="foyer-copy"){ const c=S.profile.foyer; navigator.clipboard.writeText(c).then(()=>{ S.note="Code copié."; render(); }).catch(()=>{ const r=document.createRange(), el=$("#foyercode-v"); r.selectNodeContents(el); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); }); return; }
   if(a==="mic") return Mic.toggle();
   if(a==="people"){ S.people=ppl()%6+1; if(S.profile){ S.profile.people=S.people; store.save("profile",S.profile); } return render(); }
   if(a==="share"){ S.share=(S.share||1)%6+1; return render(); }
@@ -972,14 +1055,14 @@ document.addEventListener("click", e=>{
     day().acts.push({id:uid(), name:ACTS[i][0], min, kcal:(ACTS[i][1]-1)*w*min/60}); saveDay(); S.sheet=null; return render(); }
   if(a==="weight"){ const v=num($("#weight").value); if(!v) return; day().weight=v; saveDay(); S.sheet=null; S.note="Pesée enregistrée."; return render(); }
   if(a==="usereal"){ if(!S.profile) return go("profil"); S.profile.tdeeReal=+b.dataset.v||0; store.save("profile",S.profile); return render(); }
-  if(a==="saveprofile"){ const first=!S.profile, p=S.draftProfile; delete p.example; p.people=+p.people||1; S.people=null; S.profile=JSON.parse(JSON.stringify(p)); store.save("profile",S.profile); if(first){ S.step=0; return go("plan"); } S.note="Profil enregistré."; return render(); }
+  if(a==="saveprofile"){ const first=!S.profile, p=S.draftProfile; delete p.example; if(S.profile) for(const k of ["foyer","tdeeReal"]){ if(S.profile[k]!=null) p[k]=S.profile[k]; else delete p[k]; } p.people=+p.people||1; S.people=null; S.profile=JSON.parse(JSON.stringify(p)); store.save("profile",S.profile); if(first){ S.step=0; return go("plan"); } S.note="Profil enregistré."; return render(); }
   if(a==="code"){ AI.code=$("#code").value.trim(); store.put("code",AI.code); S.note="Code enregistré."; return render(); }
-  if(a==="export"){ const blob=new Blob([JSON.stringify({app:"agni",v:2,profile:S.profile,days:S.days})],{type:"application/json"}); const l=document.createElement("a"); l.href=URL.createObjectURL(blob); l.download="agni-"+today()+".json"; l.click(); return; }
+  if(a==="export"){ const blob=new Blob([JSON.stringify({app:"agni",v:3,profile:S.profile,days:S.days,favs:S.favs})],{type:"application/json"}); const l=document.createElement("a"); l.href=URL.createObjectURL(blob); l.download="agni-"+today()+".json"; l.click(); return; }
   if(a==="reset"){ S.confirmReset=true; return render(); }
   if(a==="reset-no"){ S.confirmReset=false; return render(); }
-  if(a==="reset-yes"){ const keys=Object.keys(S.days); S.profile=null; S.days={}; S.draftProfile=null; S.confirmReset=false;
-    try{ localStorage.removeItem("agni:profile"); localStorage.removeItem("agni:days"); }catch(e){}
-    if(store.col){ store.col.doc("profile").delete().catch(()=>{}); keys.forEach(k=>store.col.doc("d-"+k).delete().catch(()=>{})); }
+  if(a==="reset-yes"){ const keys=Object.keys(S.days); S.profile=null; S.days={}; S.favs=[]; S.draftProfile=null; S.confirmReset=false; foyerSub();
+    try{ localStorage.removeItem("agni:profile"); localStorage.removeItem("agni:days"); localStorage.removeItem("agni:favs"); }catch(e){}
+    if(store.col){ store.col.doc("profile").delete().catch(()=>{}); store.col.doc("favs").delete().catch(()=>{}); keys.forEach(k=>store.col.doc("d-"+k).delete().catch(()=>{})); }
     S.note="Données effacées."; return render(); }
 });
 const NUMP = new Set(["age","h","w","bf","commute","sessions","dur","targetW"]);
@@ -996,7 +1079,7 @@ document.addEventListener("change", e=>{
   if(el.dataset.g){ const m=day().meals.find(x=>x.id===el.dataset.g); const g=Math.max(0,Math.round(num(el.value))); if(!m) return;
     if(m.g>0&&!m.unknown){ const k=g/m.g; m.n=m.n.map(v=>v==null?null:v*k); } m.g=g; saveDay(); return softRender(); }
   if(el.id==="photo" && el.files[0]){ const f=el.files[0]; el.value=""; shrink(f).then(b=>estimate(S.draft.trim(), b)); }
-  if(el.id==="import" && el.files[0]){ el.files[0].text().then(t=>{ const d=JSON.parse(t); if(d.app!=="agni") throw 0; S.profile=d.profile||null; S.days=d.days||{}; Object.values(S.days).forEach(fixDay); store.put("profile",S.profile); store.put("days",S.days); S.draftProfile=null; S.note="Données restaurées."; render(); }).catch(()=>{ S.note="Ce fichier n'est pas une sauvegarde Agni."; render(); }); }
+  if(el.id==="import" && el.files[0]){ el.files[0].text().then(t=>{ const d=JSON.parse(t); if(d.app!=="agni") throw 0; S.profile=d.profile||null; S.days=d.days||{}; S.favs=Array.isArray(d.favs)?d.favs:S.favs; Object.values(S.days).forEach(fixDay); store.put("profile",S.profile); store.put("days",S.days); store.put("favs",{list:S.favs}); S.draftProfile=null; S.note="Données restaurées."; render(); }).catch(()=>{ S.note="Ce fichier n'est pas une sauvegarde Agni."; render(); }); }
 });
 document.addEventListener("focusout", ()=>{ if(dirty) softRender(); });
 window.addEventListener("scroll", ()=>{ $("#band").classList.toggle("small", window.scrollY>12); }, {passive:true});
@@ -1007,7 +1090,7 @@ document.addEventListener("keydown", e=>{ if(e.key==="Enter" && e.target.id==="o
 window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(TABS.includes(h)&&h!==S.tab){ S.tab=h; S.draftProfile=null; S.sheet=null; render(false,true); } });
 
 /* ================= Démarrage ================= */
-S.profile = store.get("profile"); S.days = store.get("days") || {}; Object.values(S.days).forEach(fixDay);
+S.profile = store.get("profile"); S.days = store.get("days") || {}; S.favs = ((store.get("favs")||{}).list)||[]; Object.values(S.days).forEach(fixDay);
 { const h=location.hash.slice(1); S.tab = TABS.includes(h) ? h : (S.profile?"journal":"profil"); }
 $("#tabs").innerHTML = '<i class="ind"></i>' + [["journal","Journal","bowl"],["suivi","Suivi","chart"],["plan","Plan","leaf"],["profil","Profil","person"]].map(([k,l,ic])=>`<button class="tab" data-tab="${k}">${I[ic]}${l}</button>`).join("");
 if(STANDALONE && (window.SpeechRecognition||window.webkitSpeechRecognition)) Mic.ok=true;
@@ -1025,13 +1108,15 @@ render(false,true); loadDB();
     const id=await user.id(); if(!id) return;
     const col=db.collection("data/users/"+id), snap=await col.get();
     let remoteProfile=null; const remoteDays={};
-    snap.docs.forEach(d=>{ if(d.id==="profile") remoteProfile=d.data(); else if(d.id.startsWith("d-")) remoteDays[d.id.slice(2)]=d.data(); });
+    let remoteFavs=null; snap.docs.forEach(d=>{ if(d.id==="profile") remoteProfile=d.data(); else if(d.id==="favs") remoteFavs=d.data().list; else if(d.id.startsWith("d-")) remoteDays[d.id.slice(2)]=d.data(); });
     store.col=col;
     // Le compte fait foi ; ce qui n'existe que sur l'appareil est remonté.
     if(remoteProfile) { S.profile=remoteProfile; store.put("profile",S.profile); } else if(S.profile) store.save("profile",S.profile);
     for(const k of Object.keys(S.days)) if(!remoteDays[k] && (S.days[k].meals.length||S.days[k].acts.length||S.days[k].weight||S.days[k].water)) store.save("d-"+k,S.days[k]);
     for(const k of Object.keys(remoteDays)) S.days[k]=fixDay(remoteDays[k]);
+    if(Array.isArray(remoteFavs)){ S.favs=remoteFavs; store.put("favs",{list:S.favs}); } else if(S.favs.length) saveFavs();
     store.put("days",S.days); setSync("Synchronisé");
+    FOYER.db=db; FOYER.uid=id; foyerSub();
     if(!location.hash && S.profile && !S.draftProfile && !S.sheet) S.tab="journal"; softRender();
   }catch(e){ setSync("Sur cet appareil"); }
 })();
