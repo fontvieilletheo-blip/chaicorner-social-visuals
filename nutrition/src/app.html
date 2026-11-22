@@ -170,6 +170,21 @@ details[open] summary{margin-bottom:10px}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;background:#fff;border-radius:14px 14px 0 0;max-height:88%;overflow:auto;box-shadow:0 -10px 40px rgba(38,43,44,.18);
   padding:14px max(16px, env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px))}
 .sheet .in{max-width:580px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.chatbtn{margin-left:auto;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;display:grid;place-items:center}
+.chatbtn .ic{width:22px;height:22px}
+.chatbtn:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.chatlog{display:flex;flex-direction:column;gap:10px;max-height:min(52vh,520px);overflow-y:auto;padding:2px}
+.msg{max-width:88%;padding:10px 12px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:1.45}
+.msg.u{align-self:flex-end;background:var(--teal);color:#fff;border-bottom-right-radius:4px}
+.msg.a{align-self:flex-start;background:var(--cream);color:var(--ink);border-bottom-left-radius:4px}
+.msg.a.wait{color:var(--muted)}
+.msg .apply{margin-top:10px;display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--sand-2);padding-top:8px}
+.msg .apply .small{color:var(--muted)}
+.chatin{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:end}
+.chatin textarea{min-height:46px;max-height:140px}
+.chatempty{display:flex;flex-direction:column;gap:10px}
+.chatempty .chips{flex-direction:column;align-items:stretch}
+.chatempty .chip{text-align:left;min-height:40px}
 .sheet-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .sheet .grab{width:40px;height:4px;border-radius:9px;background:var(--sand-2);margin:0 auto}
 .sep{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
@@ -270,6 +285,7 @@ details.mini > summary{font-size:13.5px;color:var(--fg)}
 <div class="band" id="band"><div class="in">
   <svg class="flame" viewBox="0 0 26 26" aria-hidden="true"><path class="f1" d="M13 2c2 5 7 7 7 13a7 7 0 0 1-14 0c0-3 2-5 3-6 1 2 2 3 3 4-1-4-1-8 1-11z" fill="#e2a145"/><path class="f2" d="M13 12c1 2 3 3 3 6a3 3 0 0 1-6 0c0-3 2-4 3-6z" fill="#ffdd57"/></svg>
   <div class="brand">Agni<small>Chaï Corner · yoga &amp; ayurveda</small></div>
+  <button class="chatbtn" id="chatbtn" data-sheet="chat" aria-label="Poser une question à Agni" hidden><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 9.5h8M8 12.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
 </div></div>
 <div class="page"><main id="view"></main></div>
 <nav class="tabs" aria-label="Sections"><div class="in" id="tabs"></div></nav>
@@ -705,7 +721,7 @@ function viewSheet(){
     <div id="sugbox">${sugBox()}</div>
     <div class="sep">ou</div>
     <div class="draftbox"><textarea id="draft" aria-label="Décris tout le repas" placeholder="Décris ou dicte ton repas : 150 g de riz basmati, 2 œufs, une pomme">${esc(S.draft)}</textarea>
-      <button class="btn sq mic ${Mic.on?"rec":""}" id="mic" data-act="mic" aria-pressed="${Mic.on}" aria-label="Dicter le repas" ${Mic.ok?"":"hidden"}>${I.mic}</button></div>
+      <button class="btn sq mic ${Mic.on&&Mic.tid==="draft"?"rec":""}" data-t="draft" data-act="mic" aria-pressed="${Mic.on&&Mic.tid==="draft"}" aria-label="Dicter le repas" ${Mic.ok?"":"hidden"}>${I.mic}</button></div>
     <div><button class="chip" data-act="share" aria-pressed="${(S.share||1)>1}">${(S.share||1)>1?`Plat pour ${S.share} : je compte une part${FOYER.col?" et je le partage avec mon foyer":""}`:"C'est un plat à partager ?"}</button></div>
     <div class="row"><button class="btn primary" data-act="add" ${DB.ready?"":"disabled"}>Ajouter</button>
       <button class="btn" data-act="ia" ${AI.ok?"":"hidden"}>${I.spark}Estimer</button>
@@ -724,7 +740,8 @@ function viewSheet(){
       <div style="width:92px"><input id="act-min" type="text" inputmode="numeric" min="1" placeholder="min" aria-label="Durée en minutes"></div><button class="btn primary" data-act="addact">Ajouter</button></div>
     ${D.acts.length?D.acts.map(a=>`<div class="item" style="grid-template-columns:1fr auto 34px"><div class="n"><b>${esc(a.name)}</b><span>${a.min} min</span></div><span class="num">${r0(a.kcal)} kcal</span><button class="x" data-delact="${a.id}" aria-label="Supprimer">×</button></div>`).join(""):""}
     <p class="small muted">Dépense de base du jour : ${r0(c.dayBase)} kcal (métabolisme, travail, trajets). Tes séances s'y ajoutent.</p>`; }
-  if(S.sheet==="sources"){ title="Sources et méthodes"; body=viewSources(); }
+  if(S.sheet==="sources"){ title="Sources et méthodes"; body=viewSources()+(AI.ok?`<div><button class="btn" data-sheet="chat">Poser une question sur un calcul</button></div>`:""); }
+  if(S.sheet==="chat"){ title="Questions"; body=viewChat(); }
   if(S.sheet==="weight"){ title="Pesée";
     body=`<div class="row"><div style="width:130px"><input id="weight" type="text" inputmode="decimal" step="0.1" placeholder="kg" value="${D.weight||""}" aria-label="Poids du jour en kg"></div><button class="btn primary" data-act="weight">Enregistrer</button></div>
     <p class="small muted">Le matin à jeun, 2 à 3 fois par semaine. La courbe et ta dépense réelle sont dans Suivi.</p>`; }
@@ -811,7 +828,7 @@ function viewPlan(){
       <tr><td><b>Dépense totale ${+pr.tdeeReal?"mesurée sur tes pesées":"estimée"}</b></td><td><b>${r0(c.tdee)} kcal</b></td></tr>
       <tr><td>Ajustement objectif</td><td>${r0(c.target-c.tdee)} kcal</td></tr>
       <tr><td>Protéines ${c.protPro?"(valeur fixée par ton ou ta professionnel·le)":`: ${String(Math.round(c.pPerKg*10)/10).replace(".",",")} g/kg × ${r0(c.refW)} kg${c.refW_bmi?" (poids de référence, IMC 25)":""}`}</td><td>${r0(c.p)} g</td></tr></table></div>
-      <p class="small" style="margin-top:8px"><button class="btn ghost" data-sheet="sources" style="padding-left:0">Voir les sources de chaque calcul</button></p><p class="small" style="margin-top:8px">Ce sont des estimations de départ, à ±10 %. L'onglet Suivi recalcule ta dépense réelle à partir de tes pesées.</p></details>
+      <p class="small" style="margin-top:8px"><button class="btn ghost" data-sheet="sources" style="padding-left:0">Voir les sources de chaque calcul</button>${AI.ok?` · <button class="btn ghost" data-sheet="chat" style="padding-left:0">Poser une question</button>`:""}</p><p class="small" style="margin-top:8px">Ce sont des estimations de départ, à ±10 %. L'onglet Suivi recalcule ta dépense réelle à partir de tes pesées.</p></details>
   </section>
   <section class="card">
     <h2>De saison en ${MONTHS[m]}</h2>
@@ -949,6 +966,8 @@ function render(keepFocus, enter, dir){
   $("#sheet").innerHTML = viewSheet(); S.opening=false; S.fresh=null;
   open.forEach(id=>{ const el=document.getElementById(id); if(el){ el.classList.add("noanim"); el.open=true; } });
   const ti=TABS.indexOf(S.tab); document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-current", b.dataset.tab===S.tab?"page":"false"));
+  const cb=$("#chatbtn"); if(cb) cb.hidden=!AI.ok;
+  if(S.sheet==="chat") scrollChat();
   const ind=$("#tabs .ind"); if(ind) ind.style.transform=`translateX(${ti*100}%)`;
   animate(enter);
   if(fid){ const el=document.getElementById(fid); if(el){ el.focus(); try{ if(pos!=null) el.setSelectionRange(pos,pos);}catch(e){} } }
@@ -1015,13 +1034,88 @@ async function askAdvice(){
   render();
 }
 
+/* ================= Chat interne ================= */
+// Claude répond avec le contexte complet de l'app : profil, calculs détaillés, sources, journal du jour, semaine.
+// Il peut proposer une correction ; elle ne s'applique que si l'utilisateur appuie sur « Appliquer ».
+S.chat=[]; S.chatQ="";
+const saveChat = () => store.put("chat", S.chat.slice(-30));
+const PFIELDS = {protG:["Protéines fixées (g/j)","n"], w:["Poids (kg)","n"], targetW:["Poids visé (kg)","n"], sessions:["Séances par semaine","n"], dur:["Durée d'une séance (min)","n"], commute:["Trajets actifs (min/j)","n"], bf:["Masse grasse (%)","n"],
+  goal:["Objectif",["perte","maintien","prise"]], pace:["Rythme",["doux","soutenu"]], diet:["Régime",["omnivore","flexi","vegetarien","vegan"]], job:["Travail",["assis","mixte","physique"]], intensity:["Intensité",["leger","mod","intense"]], people:["Personnes à table","n"], meals:["Repas par jour","n"]};
+const CHAT_Q = ["Pourquoi ma cible de protéines est-elle à ce niveau ?","Comment est calculée ma dépense du jour ?","Les grammes de mes repas d'aujourd'hui sont-ils réalistes ?","Qu'est-ce qui me manque le plus en micronutriments cette semaine ?"];
+function viewChat(){
+  if(!AI.ok) return `<p>Les questions passent par Claude, qui n'est pas disponible sur cette page.</p>`;
+  const log = S.chat.length ? S.chat.map((m,i)=>`<div class="msg ${m.role==="user"?"u":"a"} ${m.wait?"wait":""}" ${i===S.chat.length-1?'id="chat-last"':""}>${esc(m.text)}${m.action&&!m.applied?`<div class="apply"><span class="small">Proposition : ${esc(actionLabel(m.action))}</span><button class="btn" data-apply="${i}">Appliquer</button></div>`:m.applied?`<div class="apply"><span class="small">Appliqué.</span></div>`:""}</div>`).join("")
+    : `<div class="chatempty"><p class="muted">Pose une question sur tes calculs, tes cibles, un repas ou une source. Agni répond avec tes données et peut proposer une correction, que tu valides.</p><div class="chips">${CHAT_Q.map(q=>`<button class="chip" data-ask="${esc(q)}">${esc(q)}</button>`).join("")}</div></div>`;
+  return `<div class="chatlog" id="chatlog">${log}</div>
+    <div class="chatin"><textarea id="chatq" aria-label="Ta question" placeholder="Ta question…">${esc(S.chatQ)}</textarea>
+      <button class="btn sq mic ${Mic.on&&Mic.tid==="chatq"?"rec":""}" data-t="chatq" data-act="mic" aria-label="Dicter la question" ${Mic.ok?"":"hidden"}>${I.mic}</button>
+      <button class="btn primary sq" data-act="chatsend" aria-label="Envoyer" style="margin:0">↑</button></div>
+    ${S.chat.length?`<div><button class="btn ghost" data-act="chatclear">Effacer la conversation</button></div>`:""}`;
+}
+function actionLabel(a){ if(a.type==="grams"){ const m=day().meals.find(x=>x.id===a.id); return m?`${shortName(m.name)[0]} : ${m.g} g → ${a.g} g`:"aliment introuvable"; }
+  if(a.type==="remove"){ const m=day().meals.find(x=>x.id===a.id); return m?`retirer ${shortName(m.name)[0]} du journal`:"aliment introuvable"; }
+  if(a.type==="profile"){ const f=PFIELDS[a.field]; return f?`${f[0]} : ${prof()[a.field]??"–"} → ${a.value}`:"champ inconnu"; } return ""; }
+function parseAction(t){ const m=t.match(/\n?ACTION\s*(\{[^\n]*\})\s*$/); if(!m) return [t,null];
+  let a=null; try{ a=JSON.parse(m[1]); }catch(e){}
+  const D=day(), ok = a && ((a.type==="grams" && D.meals.some(x=>x.id===a.id) && num(a.g)>0 && num(a.g)<5000) || (a.type==="remove" && D.meals.some(x=>x.id===a.id))
+    || (a.type==="profile" && PFIELDS[a.field] && (PFIELDS[a.field][1]==="n" ? num(a.value)>=0 && num(a.value)<1000 : PFIELDS[a.field][1].includes(a.value))));
+  return [t.slice(0,m.index).trim(), ok?a:null]; }
+function chatApply(i){ const m=S.chat[i]; if(!m||!m.action||m.applied) return; const a=m.action, D=day();
+  if(a.type==="grams"){ const it=D.meals.find(x=>x.id===a.id); const g=Math.round(num(a.g)); if(it&&!it.unknown&&it.g>0){ const k=g/it.g; it.n=it.n.map(v=>v==null?null:v*k); it.g=g; saveDay(); } }
+  if(a.type==="remove"){ D.meals=D.meals.filter(x=>x.id!==a.id); saveDay(); }
+  if(a.type==="profile"){ if(!S.profile) return; S.profile[a.field]=PFIELDS[a.field][1]==="n"?num(a.value):a.value; store.save("profile",S.profile); S.draftProfile=null; }
+  m.applied=true; saveChat(); S.note="Correction appliquée : "+actionLabel(a); render(); }
+function chatContext(){
+  const pr=prof(), c=compute(pr), R=refs(pr,c), t=totals(), D=S.days[S.date]||{meals:[],acts:[]}, h=pr.sex==="h";
+  const fx=n=>String(Math.round(n*10)/10).replace(".",",");
+  const lines=[];
+  lines.push(`PROFIL : ${h?"homme":"femme"}, ${pr.age} ans, ${pr.h} cm, ${pr.w} kg${+pr.bf?", masse grasse "+pr.bf+" %":""}, IMC ${fx(c.bmi)}. Travail : ${pr.job}. Trajets actifs : ${pr.commute||0} min/j. Sport : ${pr.sessions||0} séance(s) de ${pr.dur||0} min par semaine, intensité ${pr.intensity}. Objectif : ${pr.goal}, rythme ${pr.pace}${pr.targetW?", poids visé "+pr.targetW+" kg":""}. Régime : ${pr.diet}. ${mealPlan(pr).length} repas par jour, jeûne ${pr.fast||"12"}. Cuisine pour ${ppl()} personne(s).${pr.notes?" Notes : "+String(pr.notes).slice(0,300):""}${S.profile?"":" (PROFIL D'EXEMPLE : l'utilisateur n'a pas encore fait son diagnostic.)"}`);
+  lines.push(`CALCULS ACTUELS : métabolisme de base ${r0(c.bmr)} kcal (${+pr.bf>3?"Katch-McArdle":"Mifflin-St Jeor"}) ; × ${JOB[pr.job]} pour le travail = ${r0(c.base)} ; trajets +${r0(c.commute)} ; sport lissé +${r0(c.sport)} ; dépense ${+pr.tdeeReal?"MESURÉE sur les pesées : "+r0(c.tdee):"estimée "+r0(c.tdee)} kcal ; cible ${r0(c.target)} kcal (ajustement ${r0(c.target-c.tdee)}). Protéines ${r0(c.p)} g = ${c.protPro?"valeur fixée par un professionnel":fx(c.pPerKg)+" g/kg × poids de référence "+fx(c.refW)+" kg"+(c.refW_bmi?" (IMC 25)":"")}. Lipides ${r0(c.l)} g (35 %). Glucides ${r0(c.c)} g (reste). Fibres ${c.fiber} g. Eau ${c.water/1000} L. Rythme prévu ${fx(c.weekly)} kg/semaine.`);
+  lines.push("MÉTHODES ET SOURCES DE L'APP :\n"+SOURCES.map(([g,l])=>l.map(([n,how,src])=>`- ${n} : ${how} Source : ${src}`).join("\n")).join("\n"));
+  lines.push("REPÈRES MICRONUTRIMENTS (profil) : "+MICROS.flatMap(g=>g[1]).map(([k,lab,unit])=>`${lab} ${R[k][1]==="max"?"≤":""}${r1(R[k][0])} ${unit} (${REFSRC[k]||""})`).join(" ; "));
+  lines.push("MESURES MÉNAGÈRES : "+MEASURES.map(([a,b])=>a+" = "+b).join(" ; "));
+  lines.push(`JOURNAL DU ${S.date} : ${D.meals.length?D.meals.map(m=>`[id ${m.id}] ${m.slot} · ${m.name} · ${m.g} g · ${r0(m.n[0])} kcal, P ${fx(m.n[1]||0)}, G ${fx(m.n[2]||0)}, L ${fx(m.n[3]||0)} · source ${m.src==="ciqual"?"Ciqual":m.src==="ia"?"estimation Claude":m.src==="off"?"Open Food Facts":m.src||"?"}${m.unknown?" (NON RECONNU)":""}`).join(" | "):"rien"}. Totaux : ${r0(t.kcal)} kcal, P ${r0(t.p)} g, G ${r0(t.c)} g, L ${r0(t.l)} g, fibres ${r0(t.f)} g. Activité ${r0(t.act)} kcal. Eau ${(D.water||0)*0.25} L.${D.weight?" Pesée "+D.weight+" kg.":""}`);
+  const lowd=MICROS.flatMap(g=>g[1]).filter(([k])=>(KI[k]!=null||k==="om3")).map(([k,lab,unit])=>`${lab} ${r1(val(t,k))}/${r1(R[k][0])} ${unit}`).join(" ; ");
+  if(D.meals.length) lines.push("MICRONUTRIMENTS DU JOUR (minimum, valeurs Ciqual manquantes = 0) : "+lowd);
+  const dd=Array.from({length:7},(_,i)=>addDays(today(),i-6)), ts=dd.map(d=>totals(d)).filter(x=>x.kcal>0);
+  if(ts.length) lines.push(`SEMAINE : ${ts.length} jour(s) notés, moyenne ${r0(ts.reduce((a,x)=>a+x.kcal,0)/ts.length)} kcal, P ${r0(ts.reduce((a,x)=>a+x.p,0)/ts.length)} g.`);
+  const ws=Object.keys(S.days).sort().filter(d=>S.days[d].weight).slice(-6).map(d=>d+" : "+S.days[d].weight+" kg"); if(ws.length) lines.push("PESÉES : "+ws.join(", "));
+  return lines.join("\n\n");
+}
+const CHAT_RULES = `Tu es l'assistant intégré d'Agni, l'app de suivi nutrition de Chaï Corner (yoga et ayurveda). Réponds en français, en tutoyant, de façon directe et courte (6 à 10 lignes en général), en texte brut sans markdown.
+Règles :
+- Appuie-toi sur les DONNÉES ci-dessous : ce sont les vrais calculs et le vrai journal de l'utilisateur. Montre le calcul chiffré quand on t'interroge sur un chiffre.
+- Cite la source quand tu donnes une référence (celles de l'app : Anses, EFSA, Ciqual, Mifflin-St Jeor…). Distingue ce qui est un choix de l'app de ce qui vient d'une source. N'invente pas de source ni de chiffre : si tu ne sais pas, dis-le.
+- Si une valeur de l'app te paraît fausse ou discutable, dis-le franchement et explique pourquoi.
+- Les conseils ayurvédiques viennent de la tradition, pas d'études cliniques : précise-le si c'est utile.
+- Tu ne poses pas de diagnostic médical ; pour une pathologie, un traitement, une grossesse ou un trouble alimentaire, renvoie vers un professionnel.
+- Respecte le régime alimentaire du profil.
+- Si une correction concrète est utile (grammes d'un aliment du journal, aliment à retirer, champ du profil), décris-la puis termine ta réponse par UNE ligne seule, sans rien après :
+ACTION {"type":"grams","id":"<id de l'aliment>","g":<nombre>}
+ou ACTION {"type":"remove","id":"<id>"}
+ou ACTION {"type":"profile","field":"<${Object.keys(PFIELDS).join("|")}>","value":<valeur>}
+Valeurs possibles : goal perte|maintien|prise ; pace doux|soutenu ; diet omnivore|flexi|vegetarien|vegan ; job assis|mixte|physique ; intensity leger|mod|intense. L'utilisateur validera lui-même. N'en propose qu'une par réponse, et seulement si elle est justifiée.`;
+async function chatSend(){
+  const q=(S.chatQ||"").trim(); if(!q||!AI.ok) return; Mic.stop();
+  const hist=S.chat.filter(m=>!m.wait).slice(-8);
+  S.chat.push({role:"user", text:q}); S.chat.push({role:"assistant", text:"Agni réfléchit…", wait:true}); S.chatQ=""; render(); scrollChat();
+  const prompt=`${CHAT_RULES}\n\n=== DONNÉES DE L'APP (${new Date().toLocaleString("fr-FR")}) ===\n${chatContext()}\n\n=== CONVERSATION ===\n${hist.map(m=>(m.role==="user"?"Utilisateur : ":"Agni : ")+m.text).join("\n")}\nUtilisateur : ${q}\nAgni :`;
+  const last=S.chat[S.chat.length-1];
+  try{ const out=await AI.text(prompt,{onText:txt=>{ last.wait=false; last.text=txt.replace(/\n?ACTION\s*\{[^\n]*$/,""); const el=$("#chat-last"); if(el){ el.classList.remove("wait"); el.textContent=last.text; scrollChat(); } }});
+    const [txt,act]=parseAction(out.trim()); last.text=txt||"(pas de réponse)"; last.wait=false; if(act) last.action=act;
+  }catch(e){ last.wait=false; last.text=aiErr(e)||"Réponse interrompue."; }
+  saveChat(); render(true); scrollChat();
+}
+function scrollChat(){ const l=$("#chatlog"); if(l) l.scrollTop=l.scrollHeight; }
+
 /* ================= Dictée ================= */
 // Dans l'artefact : capacité « dictation ». Sur le site : reconnaissance vocale du navigateur.
-const Mic = {ok:false, on:false, cap:null, rec:null, base:"", fin:"",
-  show(partial){ const t=(this.base?this.base.replace(/[\s,]*$/,", "):"")+this.fin+(partial||""); S.draft=t; const el=$("#draft"); if(el){ el.value=t; el.scrollTop=el.scrollHeight; } },
-  paint(){ const b=$("#mic"); if(b){ b.classList.toggle("rec",this.on); b.setAttribute("aria-pressed",this.on); } },
-  fail(e){ this.on=false; this.paint(); if(e&&(e.code==="not_granted"||e.code==="unavailable"||e.error==="not-allowed")){ this.ok=false; const b=$("#mic"); if(b) b.hidden=true; S.note="La dictée n'est pas disponible ici. Tu peux utiliser le micro de ton clavier."; const n=$(".sheet .small[aria-live]"); if(n) n.textContent=S.note; } },
-  toggle(){ if(this.on) return this.stop(); this.base=S.draft.trim(); this.fin="";
+const MICKEY = {draft:"draft", chatq:"chatQ"};
+const Mic = {ok:false, on:false, cap:null, rec:null, base:"", fin:"", tid:"draft",
+  show(partial){ const sep=this.tid==="draft"?", ":" "; const t=(this.base?this.base.replace(/[\s,]*$/,sep):"")+this.fin+(partial||""); S[MICKEY[this.tid]]=t; const el=document.getElementById(this.tid); if(el){ el.value=t; el.scrollTop=el.scrollHeight; } },
+  paint(){ document.querySelectorAll(".mic").forEach(b=>{ const on=this.on&&b.dataset.t===this.tid; b.classList.toggle("rec",on); b.setAttribute("aria-pressed",on); }); },
+  fail(e){ this.on=false; this.paint(); if(e&&(e.code==="not_granted"||e.code==="unavailable"||e.error==="not-allowed")){ this.ok=false; document.querySelectorAll(".mic").forEach(b=>b.hidden=true); S.note="La dictée n'est pas disponible ici. Tu peux utiliser le micro de ton clavier."; const n=$(".sheet .small[aria-live]"); if(n) n.textContent=S.note; } },
+  toggle(tid){ if(this.on) return this.stop(); this.tid=tid||"draft"; this.base=(S[MICKEY[this.tid]]||"").trim(); this.fin="";
     if(this.cap){ this.on=true; this.paint(); this.cap.start({language:"fr"}).catch(e=>{ if(!e||e.code!=="stopped") this.fail(e); }); return; }
     const R=window.SpeechRecognition||window.webkitSpeechRecognition; if(!R) return this.fail({code:"unavailable"});
     const r=this.rec=new R(); r.lang="fr-FR"; r.interimResults=true; r.continuous=true;
@@ -1078,6 +1172,8 @@ document.addEventListener("click", e=>{
     const keep=S.slot; S.slot=m.slot; addItems(m.items.map(x=>({name:x.name, g:Math.round(x.g/m.parts), n:x.n.map(v=>v==null?null:v/m.parts), src:"foyer", gi:x.gi}))); S.slot=keep;
     S.note=`Ta part de « ${m.title} » est ajoutée. Ajuste les grammes si ta portion est différente.`; return render(); }
   if(b.dataset.foyerskip){ const D=day(); D.imported=(D.imported||[]).concat(b.dataset.foyerskip); saveDay(); return render(); }
+  if(b.dataset.ask){ S.chatQ=b.dataset.ask; return chatSend(); }
+  if(b.dataset.apply!=null){ return chatApply(+b.dataset.apply); }
   const a=b.dataset.act; if(!a) return;
   if(a==="favedit"){ S.favEdit=!S.favEdit; return render(); }
   if(a==="foyer-create"||a==="foyer-join"){ if(!S.profile) return; let code;
@@ -1086,7 +1182,9 @@ document.addEventListener("click", e=>{
     S.profile.foyer=code; store.save("profile",S.profile); S.draftProfile=null; foyerSub(); S.note=a==="foyer-create"?"Foyer créé : partage le code.":"Tu as rejoint le foyer."; return render(); }
   if(a==="foyer-leave"){ delete S.profile.foyer; store.save("profile",S.profile); S.draftProfile=null; foyerSub(); S.note="Tu as quitté le foyer."; return render(); }
   if(a==="foyer-copy"){ const c=S.profile.foyer; navigator.clipboard.writeText(c).then(()=>{ S.note="Code copié."; render(); }).catch(()=>{ const r=document.createRange(), el=$("#foyercode-v"); r.selectNodeContents(el); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); }); return; }
-  if(a==="mic") return Mic.toggle();
+  if(a==="mic") return Mic.toggle(b.dataset.t);
+  if(a==="chatsend") return chatSend();
+  if(a==="chatclear"){ S.chat=[]; saveChat(); return render(); }
   if(a==="people"){ S.people=ppl()%6+1; if(S.profile){ S.profile.people=S.people; store.save("profile",S.profile); } return render(); }
   if(a==="share"){ S.share=(S.share||1)%6+1; return render(); }
   if(a==="add"){ const t=(S.draft.trim()||S.q.trim()); if(!t){S.note="Écris ou dicte d'abord ce que tu as mangé.";return render();} S.q="";
@@ -1110,7 +1208,7 @@ document.addEventListener("click", e=>{
   if(a==="reset"){ S.confirmReset=true; return render(); }
   if(a==="reset-no"){ S.confirmReset=false; return render(); }
   if(a==="reset-yes"){ const keys=Object.keys(S.days); S.profile=null; S.days={}; S.favs=[]; S.draftProfile=null; S.confirmReset=false; foyerSub();
-    try{ localStorage.removeItem("agni:profile"); localStorage.removeItem("agni:days"); localStorage.removeItem("agni:favs"); }catch(e){}
+    try{ localStorage.removeItem("agni:profile"); localStorage.removeItem("agni:days"); localStorage.removeItem("agni:favs"); localStorage.removeItem("agni:chat"); }catch(e){} S.chat=[];
     if(store.col){ store.col.doc("profile").delete().catch(()=>{}); store.col.doc("favs").delete().catch(()=>{}); keys.forEach(k=>store.col.doc("d-"+k).delete().catch(()=>{})); }
     S.note="Données effacées."; return render(); }
 });
@@ -1118,6 +1216,7 @@ const NUMP = new Set(["age","h","w","bf","commute","sessions","dur","targetW","p
 document.addEventListener("input", e=>{
   const el=e.target;
   if(el.id==="draft"){ S.draft=el.value; return; }
+  if(el.id==="chatq"){ S.chatQ=el.value; return; }
   if(el.id==="offq"){ S.offq=el.value; return; }
   if(el.id==="q"){ S.q=el.value; const box=$("#sugbox"); if(box) box.innerHTML=sugBox(); return; }   // le champ lui-même n'est jamais recréé
   if(el.dataset.p && S.draftProfile){ const k=el.dataset.p; S.draftProfile[k]= NUMP.has(k) ? (el.value.trim()===""?"":num(el.value)) : el.value; S.note=""; }
@@ -1133,12 +1232,14 @@ document.addEventListener("change", e=>{
 document.addEventListener("focusout", ()=>{ if(dirty) softRender(); });
 window.addEventListener("scroll", ()=>{ $("#band").classList.toggle("small", window.scrollY>12); }, {passive:true});
 document.addEventListener("keydown", e=>{ if(e.key==="Enter" && e.target.id==="offq"){ e.preventDefault(); offSearch(); }
+  if(e.key==="Enter" && !e.shiftKey && e.target.id==="chatq"){ e.preventDefault(); chatSend(); }
   if(e.key==="Enter" && e.target.id==="q"){ e.preventDefault(); const f=$("#sugbox .sug"); if(f) f.click(); }
   if(e.key==="Enter" && e.target.dataset && e.target.dataset.g){ e.target.blur(); }
   if(e.key==="Escape" && S.sheet) closeSheet(); });
 window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(TABS.includes(h)&&h!==S.tab){ S.tab=h; S.draftProfile=null; S.sheet=null; render(false,true); } });
 
 /* ================= Démarrage ================= */
+S.chat = (store.get("chat")||[]).filter(m=>!m.wait);
 S.profile = store.get("profile"); S.days = store.get("days") || {}; S.favs = ((store.get("favs")||{}).list)||[]; Object.values(S.days).forEach(fixDay);
 { const h=location.hash.slice(1); S.tab = TABS.includes(h) ? h : (S.profile?"journal":"profil"); }
 $("#tabs").innerHTML = '<i class="ind"></i>' + [["journal","Journal","bowl"],["suivi","Suivi","chart"],["plan","Plan","leaf"],["profil","Profil","person"]].map(([k,l,ic])=>`<button class="tab" data-tab="${k}">${I[ic]}${l}</button>`).join("");
