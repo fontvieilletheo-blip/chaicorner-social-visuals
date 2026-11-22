@@ -43,7 +43,7 @@ button{cursor:pointer}
 .btn{border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:var(--r);padding:9px 14px;font-weight:500;min-height:42px;text-transform:uppercase;letter-spacing:.04em;font-size:13.5px}
 .btn.primary{background:var(--teal);color:#fff;box-shadow:4px 4px 0 0 #fff,4px 4px 0 1px var(--teal);margin:0 5px 5px 0}
 .card.peach .btn.primary{box-shadow:4px 4px 0 0 var(--peach),4px 4px 0 1px var(--teal)}
-.btn.ghost{border-color:transparent;text-decoration:underline;text-underline-offset:3px;padding-inline:4px}
+.btn.ghost{background:transparent;border-color:transparent;text-decoration:underline;text-underline-offset:3px;padding-inline:4px}
 .btn:disabled{opacity:.45;cursor:default}
 .btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.tab:focus-visible,.chip:focus-visible,.x:focus-visible,.sug:focus-visible,summary:focus-visible{outline:2px solid var(--amber-dark);outline-offset:2px}
 input,select,textarea{background:#fff;border:1px solid var(--teal-light);border-radius:var(--r);padding:9px 10px;min-height:42px;width:100%;min-width:0;color:var(--ink)}
@@ -56,6 +56,7 @@ label.f > span.hint{font-weight:400;color:var(--muted)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{border:1px solid var(--teal);background:#fff;color:var(--teal);border-radius:var(--r);padding:6px 11px;font-size:13.5px;min-height:36px;text-align:left}
 .chip[aria-pressed="true"]{background:var(--teal);color:#fff}
+.chip .ic{width:16px;height:16px;vertical-align:-3px;margin-right:6px}
 .tag{display:inline-block;background:var(--yellow);color:var(--teal);border-radius:var(--r);padding:3px 9px;font-size:12.5px;font-weight:600;letter-spacing:.03em}
 
 .summary{display:grid;grid-template-columns:132px 1fr;gap:16px;align-items:center}
@@ -340,7 +341,15 @@ const DGLYPH = {
  Vata:'<svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="#faf4e8"/><path d="M10 18h16c5 0 5-7 0-7M10 26h22c5 0 5 7 0 7" stroke="#43808c" stroke-width="3" stroke-linecap="round" fill="none"/></svg>',
  Pitta:'<svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="#faf4e8"/><path d="M22 8c2 6 9 9 9 17a9 9 0 0 1-18 0c0-4 2-6 4-8 1 3 2 4 4 5-1-5-1-10 1-14z" fill="#e2a145"/></svg>',
  Kapha:'<svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="#faf4e8"/><path d="M8 32l9-14 5 7 4-5 10 12z" fill="#3b5442"/><path d="M30 9c2 3 3 4 3 6a3 3 0 0 1-6 0c0-2 1-3 3-6z" fill="#43808c"/></svg>' };
-const EXAMPLE = {sex:"f", age:32, h:168, w:64, bf:"", job:"assis", commute:20, sessions:3, dur:60, intensity:"mod", goal:"perte", pace:"doux", diet:"omnivore", quiz:[], targetW:"", meals:3, fast:"12", notes:"", example:true};
+// Régime : on retire des listes de suggestions tout ce qui n'est pas compatible.
+const NOVEG=/poulet|poisson|viande|b[oœ]e?uf|porc|thon|saumon|sardine|maquereau|hareng|fruits de mer|boudin|dinde|jambon/i, NOVEGAN=/[œo]e?ufs?|laitage|skyr|fromage|yaourt|lassi|ghee|beurre|miel|\blait\b/i;
+function forDiet(txt, pr){ pr=pr||prof(); if(!txt||!pr.diet||pr.diet==="omnivore") return txt;
+  const bad = x => NOVEG.test(x) || (pr.diet==="vegan" && NOVEGAN.test(x));
+  return txt.split(" ; ").map((part,i)=> i ? (bad(part)&&!/compl[ée]ment/.test(part)?"":part) : part.split(", ").filter(x=>!bad(x)).join(", ")).filter(Boolean).join(" ; "); }
+const srcOf = (k,src,pr) => { pr=pr||prof(); if(k==="om3" && pr.diet && pr.diet!=="omnivore") return "pas de source végétale directe hors microalgues : mise sur l'ALA (colza, noix, lin) et parles-en à un professionnel"; return forDiet(src,pr); };
+const DIET_RULE = {vegetarien:" RÈGLE STRICTE : alimentation végétarienne. Aucune viande, aucun poisson, aucun fruit de mer, ni charcuterie, ni gélatine, ni bouillon de viande ou de poisson. Œufs et laitages autorisés.", vegan:" RÈGLE STRICTE : alimentation végétalienne. Aucun produit animal : ni viande, ni poisson, ni œufs, ni laitages, ni miel, ni ghee."};
+const protIdeas = pr => { const d=doshaOf(pr); return pr.diet==="vegan" ? "lentilles, pois chiches, tofu, tempeh, seitan" : forDiet(d?DOSHA[d.main].prot:"skyr ou fromage blanc, œufs, lentilles, tofu, poulet, poisson", pr); };
+const EXAMPLE = {sex:"f", age:32, h:168, w:64, bf:"", job:"assis", commute:20, sessions:3, dur:60, intensity:"mod", goal:"perte", pace:"doux", diet:"omnivore", quiz:[], targetW:"", meals:3, fast:"12", notes:"", people:1, example:true};
 
 /* ================= Table Ciqual ================= */
 const DB = {ready:false, failed:false, keys:[], groups:[], foods:[], idx:[], byName:new Map(), alias:[]};
@@ -494,6 +503,9 @@ function fixDay(D){ D.meals=(D.meals||[]).map(m=>{ if(!m.n){ const n=new Array(N
 const day = (d=S.date) => S.days[d] || (S.days[d]={meals:[],acts:[]});
 const saveDay = (d=S.date) => store.save("d-"+d, S.days[d]);
 const prof = () => S.profile || EXAMPLE;
+const ppl = () => Math.max(1, Math.min(8, +(S.people!=null?S.people:prof().people)||1));
+const pplChip = () => { const n=ppl(); return `<button class="chip" data-act="people" aria-label="Changer le nombre de personnes">${I.person}Pour ${n} personne${n>1?"s":""}</button>`; };
+const pplClause = n => n>1 ? ` Je cuisine pour ${n} personnes : donne d'abord les quantités à préparer pour ${n} (ingrédients crus, faciles à acheter), puis une ligne « Ta part » avec mes grammes dans l'assiette et mes kcal · P · G · L, calculés sur mes cibles.` : " Quantités pour une seule personne.";
 const uid = () => Math.random().toString(36).slice(2,9);
 const curSlot = () => S.slot || (()=>{const h=new Date().getHours(); return h<11?"matin":h<15?"midi":h<18?"collation":"soir"})();
 
@@ -527,7 +539,7 @@ function ruleAdvice(t,c){
   if(rest.kcal<-100) out.push(`Tu as dépassé ta cible de ${r0(-rest.kcal)} kcal. Rien de grave sur une journée : allège le prochain repas (légumes et protéines maigres) et regarde la moyenne de la semaine.`);
   else if(rest.kcal<150) out.push("Tu es sur ta cible calorique.");
   else out.push(`Il te reste environ ${r0(rest.kcal)} kcal.`);
-  if(rest.p>20){ const d=doshaOf(prof()); out.push(`Protéines : il manque ${r0(rest.p)} g. Pistes : ${d?DOSHA[d.main].prot:"skyr ou fromage blanc, œufs, lentilles, tofu, poulet, poisson"}.`); }
+  if(rest.p>20) out.push(`Protéines : il manque ${r0(rest.p)} g. Pistes : ${protIdeas(prof())}.`);
   if(rest.l<-10) out.push("Lipides au-dessus de la cible : surveille huiles, fromage et oléagineux sur le reste de la journée.");
   if(rest.f>10 && t.kcal>c.target*0.5) out.push(`Fibres : encore ${r0(rest.f)} g à trouver. Ajoute des légumes de saison, des légumineuses ou un fruit.`);
   return out.join(" ");
@@ -561,7 +573,7 @@ function viewJournal(){
       <div class="balance"><div><b>${r0(t.kcal)}</b><span>mangées</span></div><div><b>${r0(spent)}</b><span>dépensées (estim.)</span></div><div><b style="color:var(${bal>0?"--warn":"--ok"})">${bal>0?"+":"−"}${r0(Math.abs(bal))}</b><span>bilan kcal</span></div></div></details>`:""}
   </section>
   ${S.busy||S.note?`<div class="toast" role="status">${esc(S.busy||S.note)}</div>`:""}
-  ${D.meals.length?`<div class="advice">${I.spark}<p>${esc(ruleAdvice(t,c))}</p>${S.advice?`<div class="out" style="grid-column:2">${esc(S.advice)}</div>`:""}<button class="btn ghost" data-act="advice" ${AI.ok?"":"hidden"}>Une idée pour le prochain repas</button></div>
+  ${D.meals.length?`<div class="advice">${I.spark}<p>${esc(ruleAdvice(t,c))}</p>${S.advice?`<div class="out" style="grid-column:2">${esc(S.advice)}</div>`:""}${AI.ok?`<div class="row" style="grid-column:2"><button class="btn ghost" data-act="advice">Une idée pour le prochain repas</button>${pplChip()}</div>`:""}</div>
   <section class="plain">${slots}<button class="addrow" data-addslot="${slot}">${I.plus}Ajouter un repas</button></section>`
   :`<section class="card"><div class="hero-empty">${ILLU.empty}<h2>Qu'as-tu mangé ${S.date===today()?"aujourd'hui":"ce jour-là"} ?</h2>
     <div class="row" style="justify-content:center"><button class="btn primary" data-addslot="${slot}">Ajouter un repas</button>${yest&&yest.meals.length?`<button class="btn" data-act="copyday">Comme hier</button>`:""}</div></div></section>`}
@@ -591,6 +603,7 @@ function viewSheet(){
     <div class="sep">ou</div>
     <div class="draftbox"><textarea id="draft" aria-label="Décris tout le repas" placeholder="Décris ou dicte ton repas : 150 g de riz basmati, 2 œufs, une pomme">${esc(S.draft)}</textarea>
       <button class="btn sq mic ${Mic.on?"rec":""}" id="mic" data-act="mic" aria-pressed="${Mic.on}" aria-label="Dicter le repas" ${Mic.ok?"":"hidden"}>${I.mic}</button></div>
+    <div><button class="chip" data-act="share" aria-pressed="${(S.share||1)>1}">${(S.share||1)>1?`Plat pour ${S.share} : je compte une part`:"C'est un plat à partager ?"}</button></div>
     <div class="row"><button class="btn primary" data-act="add" ${DB.ready?"":"disabled"}>Ajouter</button>
       <button class="btn" data-act="ia" ${AI.ok?"":"hidden"}>${I.spark}Estimer</button>
       <button class="btn sq" data-act="photo" aria-label="Photo du plat" ${AI.img?"":"hidden"}>${I.camera}</button></div>
@@ -630,7 +643,7 @@ function viewSuivi(){
   const W=320,H=130,bw=30,gap=(W-7*bw)/8, y=v=>H-18-(v/mx)*(H-30);
   const bars=dd.map((d,i)=>{ const t=ts[i], x=gap+i*(bw+gap); const lab=new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"narrow"});
     return `<rect class="grow" style="animation-delay:${i*0.06}s" x="${x}" y="${y(t.kcal)}" width="${bw}" height="${Math.max(0,H-18-y(t.kcal))}" rx="2" fill="var(${t.kcal>c.target*1.05?"--amber":"--teal"})"/><text x="${x+bw/2}" y="${H-4}" text-anchor="middle" font-size="11" fill="var(--muted)">${lab}</text>${t.kcal?`<text x="${x+bw/2}" y="${y(t.kcal)-4}" text-anchor="middle" font-size="10" fill="var(--ink)">${r0(t.kcal)}</text>`:""}`; }).join("");
-  const low=[]; if(logged.length) for(const [,list] of MICROS) for(const [k,lab,unit,src] of list){ if(KI[k]==null&&k!=="om3") continue; const [goal,type]=R[k]; if(type!=="min") continue; const v=val(sum,k)/n; if(v<goal*0.7) low.push([v/goal,lab,src,v,goal,unit]); }
+  const low=[]; if(logged.length) for(const [,list] of MICROS) for(const [k,lab,unit,src] of list){ if(KI[k]==null&&k!=="om3") continue; const [goal,type]=R[k]; if(type!=="min") continue; const v=val(sum,k)/n; if(v<goal*0.7) low.push([v/goal,lab,srcOf(k,src,pr),v,goal,unit]); }
   low.sort((a,b)=>a[0]-b[0]);
   const wd=Object.keys(S.days).sort().filter(d=>S.days[d].weight).slice(-30), ws=wd.map(d=>S.days[d].weight);
   let spark="";
@@ -704,10 +717,10 @@ function viewPlan(){
     <div class="row" style="justify-content:space-between"><h2>Lecture ayurvédique</h2><span class="tag">Saison ${ritu.d}</span></div>
     <p><b>${ritu.t}.</b> ${ritu.a}</p>
     ${d ? `<div class="dosha">${DGLYPH[d.main]}<div><h3>Ta constitution dominante</h3><p class="lead">${d.label}</p></div></div>
-    <details class="acc" id="d-dosha"><summary>Ce qui te convient</summary><div class="body"><ul class="clean"><li><b>À favoriser :</b> ${DOSHA[d.main].fav}.</li><li><b>À limiter :</b> ${DOSHA[d.main].lim}.</li><li><b>Tes protéines :</b> ${DOSHA[d.main].prot}.</li></ul></div></details>` : `<div class="banner">Réponds aux 6 questions de constitution dans Profil pour personnaliser cette partie. <div style="margin-top:8px"><button class="btn" data-go="profil">Aller au profil</button></div></div>`}
+    <details class="acc" id="d-dosha"><summary>Ce qui te convient</summary><div class="body"><ul class="clean"><li><b>À favoriser :</b> ${forDiet(DOSHA[d.main].fav,pr)}.</li><li><b>À limiter :</b> ${DOSHA[d.main].lim}.</li><li><b>Tes protéines :</b> ${protIdeas(pr)}.</li></ul></div></details>` : `<div class="banner">Réponds aux 6 questions de constitution dans Profil pour personnaliser cette partie. <div style="margin-top:8px"><button class="btn" data-go="profil">Aller au profil</button></div></div>`}
     <details class="acc" id="d-kichari"><summary>Kichari${K?`<span class="num">${r0(K.n[0])} kcal le bol</span>`:""}</summary><div class="body">
-      <div class="withillu">${ILLU.kichari}<div><p>Riz basmati 60 g et mung dal 50 g (crus), 150 g de légumes de saison, 10 g de ghee, cumin, curcuma, gingembre.</p>${K?`<p class="num small">P ${r0(K.n[1])} · G ${r0(K.n[2])} · L ${r0(K.n[3])} · fibres ${r0(K.n[4])} g · fer ${r1(K.n[KI.fe])} mg · magnésium ${r0(K.n[KI.mg])} mg</p>`:""}</div></div>
-      ${K?`<p class="small muted">Journée kichari (3 bols) : ${r0(K.n[0]*3)} kcal et ${r0(K.n[1]*3)} g de protéines, soit ${r0(K.n[0]*3/c.target*100)} % de ta cible calorique et ${r0(K.n[1]*3/c.p*100)} % de ta cible protéines. ${K.n[1]*3<c.p*0.8?`Pour tenir tes macros, ajoute ${r0(c.p-K.n[1]*3)} g de protéines : double le mung dal, ou complète avec un lassi, du tofu ou des œufs.`:""}</p>
+      <div class="withillu">${ILLU.kichari}<div><p>${ppl()>1?`Pour ${ppl()} : `:""}riz basmati ${60*ppl()} g et mung dal ${50*ppl()} g (crus), ${150*ppl()} g de légumes de saison, ${10*ppl()} g ${pr.diet==="vegan"?"d'huile de coco":"de ghee"}, cumin, curcuma, gingembre.${ppl()>1?" Ta part : un bol.":""}</p><div>${pplChip()}</div>${K?`<p class="num small">P ${r0(K.n[1])} · G ${r0(K.n[2])} · L ${r0(K.n[3])} · fibres ${r0(K.n[4])} g · fer ${r1(K.n[KI.fe])} mg · magnésium ${r0(K.n[KI.mg])} mg</p>`:""}</div></div>
+      ${K?`<p class="small muted">Journée kichari (3 bols) : ${r0(K.n[0]*3)} kcal et ${r0(K.n[1]*3)} g de protéines, soit ${r0(K.n[0]*3/c.target*100)} % de ta cible calorique et ${r0(K.n[1]*3/c.p*100)} % de ta cible protéines. ${K.n[1]*3<c.p*0.8?`Pour tenir tes macros, ajoute ${r0(c.p-K.n[1]*3)} g de protéines : double le mung dal, ou complète avec ${pr.diet==="vegan"?"du tofu ou du tempeh":"un lassi, du tofu ou des œufs"}.`:""}</p>
       <div><button class="btn" data-act="kichari">Ajouter un bol au journal</button></div>`:""}</div></details>
     <details class="acc" id="d-jeune"><summary>Jeûne${fast[1]?`<span>${fast[0]}</span>`:""}</summary><div class="body">
       <ul class="clean"><li>Base : 12 h de repos digestif la nuit (dîner 19 h 30, petit-déjeuner 7 h 30), sans grignotage entre les repas.</li>
@@ -719,7 +732,7 @@ function viewPlan(){
     <h2>Ma journée type</h2>
     <p class="small muted">Claude compose une journée de repas qui respecte tes cibles, la saison et ta lecture ayurvédique.</p>
     ${S.planText?`<div class="out" id="plan-out">${esc(S.planText)}</div>`:`<div class="out" id="plan-out" hidden></div>`}
-    <div class="row"><button class="btn primary" data-act="plan">${S.planText?"Proposer une autre journée":"Composer ma journée"}</button></div>
+    <div class="row"><button class="btn primary" data-act="plan">${S.planText?"Proposer une autre journée":"Composer ma journée"}</button>${pplChip()}</div>
   </section>
   <section class="plain">
     <details class="acc" id="d-rep"><summary>Répartition sur la journée<span>${meals.length} repas</span></summary><div class="body">
@@ -728,7 +741,7 @@ function viewPlan(){
       <p class="small muted">${fast[1]?`Fenêtre alimentaire ${fast[0]} : ${fast[1]}. `:""}Le plus gros repas à midi, quand la digestion (agni) est la plus forte ; un dîner léger au moins 2 h avant le coucher.</p></div></details>
     <details class="acc" id="d-refs"><summary>Repères en micronutriments</summary><div class="body">
       ${diet?`<div class="banner">${diet}</div>`:""}
-      <div class="tw"><table><tr><th>Nutriment</th><th>Par jour</th></tr>${MICROS.flatMap(g=>g[1]).map(([k,lab,unit,src])=>`<tr><td>${lab}${src?`<br><span class="small muted">${src}</span>`:""}</td><td>${R[k][1]==="max"?"≤ ":""}${r1(R[k][0])} ${unit}</td></tr>`).join("")}</table></div>
+      <div class="tw"><table><tr><th>Nutriment</th><th>Par jour</th></tr>${MICROS.flatMap(g=>g[1]).map(([k,lab,unit,src0])=>{ const src=srcOf(k,src0,pr); return `<tr><td>${lab}${src?`<br><span class="small muted">${src}</span>`:""}</td><td>${R[k][1]==="max"?"≤ ":""}${r1(R[k][0])} ${unit}</td></tr>`; }).join("")}</table></div>
       <p class="small muted">Références nutritionnelles pour la population adulte (Anses). Elles ne couvrent pas la grossesse, l'allaitement ni les pathologies.</p></div></details>
     <details class="acc" id="d-sport"><summary>Activité : quoi ajuster</summary><div class="body"><ul class="clean">${sportRec.map(x=>`<li>${x}</li>`).join("")}</ul></div></details>
   </section>
@@ -755,6 +768,7 @@ const SEC = {
       <label class="f">Régime<select id="p-diet" data-p="diet">${opt("omnivore","Omnivore",p.diet)}${opt("vegetarien","Végétarien",p.diet)}${opt("vegan","Végétalien",p.diet)}</select></label>
       <label class="f">Repas par jour<select id="p-meals" data-p="meals">${opt(2,"2 repas",p.meals)}${opt(3,"3 repas",p.meals)}${opt(4,"3 repas et une collation",p.meals)}</select></label>
     </div>
+    <label class="f">Je cuisine en général pour<select id="p-people" data-p="people">${[1,2,3,4,5,6].map(n=>opt(n,n+(n>1?" personnes":" personne (moi)"),p.people||1)).join("")}</select></label>
     <label class="f">Jeûne<select id="p-fast" data-p="fast">${opt("aucun","Pas de fenêtre de jeûne",p.fast)}${opt("12","12 h la nuit (base ayurvédique)",p.fast)}${opt("14","14/10",p.fast)}${opt("16","16/8",p.fast)}</select></label>
     <label class="f">Allergies, aliments exclus, habitudes <span class="hint">facultatif, repris dans les idées de repas</span><textarea id="p-notes" data-p="notes" placeholder="Sans gluten, pas de poisson, je déjeune au travail…">${esc(p.notes||"")}</textarea></label>`,
  obj:(p,c)=>`<div class="grid2">
@@ -860,7 +874,7 @@ async function estimate(text, blob){
   S.busy = blob ? "Claude regarde la photo…" : "Claude estime le repas…"; S.note=""; render();
   try{ const arr = await AI.json(EST+"\n\nRepas : "+(text||"voir la photo jointe"), blob);
     if(!Array.isArray(arr)||!arr.length){ S.note="Aucun aliment reconnu. Décris le plat en quelques mots et réessaie."; }
-    else { addItems(arr.map(fromAI)); S.draft=""; S.sheet=null; S.note=arr.length+" aliment(s) ajouté(s). Corrige les grammes si besoin : tout se recalcule."; }
+    else { const its=arr.map(fromAI); addItems(blob?its:myShare(its)); S.draft=""; S.sheet=null; S.note=arr.length+" aliment(s) ajouté(s). Corrige les grammes si besoin : tout se recalcule."; }
   }catch(e){ S.note=aiErr(e); }
   S.busy=""; render();
 }
@@ -871,11 +885,11 @@ async function shrink(file){
     return await new Promise(r=>cv.toBlob(b=>r(b||file),"image/jpeg",0.85)); }catch(e){ return file; }
 }
 function context(){ const pr=prof(), c=compute(pr), m=new Date().getMonth(), d=doshaOf(pr), ritu=RITU(m), f=FASTS[pr.fast||"12"];
-  return `Profil : ${pr.sex==="h"?"homme":"femme"}, ${pr.age} ans, ${pr.w} kg, alimentation ${pr.diet}, objectif ${pr.goal}, ${mealPlan(pr).length} prises alimentaires par jour${f[1]?", fenêtre alimentaire "+f[1]:""}.${pr.notes?" Contraintes et habitudes : "+String(pr.notes).slice(0,300)+".":""} Cibles du jour : ${r0(c.target)} kcal, ${r0(c.p)} g protéines, ${r0(c.c)} g glucides, ${r0(c.l)} g lipides, ${r0(c.fiber)} g fibres. Mois : ${MONTHS[m]} en France. Légumes de saison : ${SEASON[m][0]}. Fruits de saison : ${SEASON[m][1]}. Ayurveda : saison ${ritu.d}${d?", constitution dominante "+d.label:""}.`; }
+  return `Profil : ${pr.sex==="h"?"homme":"femme"}, ${pr.age} ans, ${pr.w} kg, alimentation ${{omnivore:"omnivore",vegetarien:"végétarienne",vegan:"végétalienne"}[pr.diet]||"omnivore"}, objectif ${pr.goal}, ${mealPlan(pr).length} prises alimentaires par jour${f[1]?", fenêtre alimentaire "+f[1]:""}.${pr.notes?" Contraintes et habitudes : "+String(pr.notes).slice(0,300)+".":""} Cibles du jour : ${r0(c.target)} kcal, ${r0(c.p)} g protéines, ${r0(c.c)} g glucides, ${r0(c.l)} g lipides, ${r0(c.fiber)} g fibres. Mois : ${MONTHS[m]} en France. Légumes de saison : ${SEASON[m][0]}. Fruits de saison : ${SEASON[m][1]}. Ayurveda : saison ${ritu.d}${d?", constitution dominante "+d.label:""}.${DIET_RULE[pr.diet]||""}`; }
 async function askPlan(){
   S.planText="Claude réfléchit…"; S.note=""; render();
   const mp=mealPlan(prof()).map(m=>m[0]).join(", ");
-  try{ S.planText = await AI.text(`${context()}\n\nCompose une journée type en français, en tutoyant, avec ces prises : ${mp}. Utilise surtout des produits de saison achetables en France et respecte les principes ayurvédiques de la saison${doshaOf(prof())?" et de la constitution":""} (plats chauds et cuits si Vata, etc.), sans sacrifier les cibles. Veille à la densité en micronutriments (fer, calcium, magnésium, folates, vitamine C, oméga-3). Pour chaque repas : les aliments avec leurs grammes, puis une ligne "≈ kcal · P · G · L". Termine par le total du jour comparé aux cibles (écart toléré : 5 %). Texte brut, sans markdown, pas d'introduction.`,
+  try{ S.planText = await AI.text(`${context()}\n\nCompose une journée type en français, en tutoyant, avec ces prises : ${mp}. Utilise surtout des produits de saison achetables en France et respecte les principes ayurvédiques de la saison${doshaOf(prof())?" et de la constitution":""} (plats chauds et cuits si Vata, etc.), sans sacrifier les cibles. Veille à la densité en micronutriments (fer, calcium, magnésium, folates, vitamine C, oméga-3). Pour chaque repas : les aliments avec leurs grammes, puis une ligne "≈ kcal · P · G · L" pour ma part.${pplClause(ppl())} Termine par le total du jour de ma part comparé à mes cibles (écart toléré : 5 %).${DIET_RULE[prof().diet]?" Vérifie avant de répondre que chaque aliment respecte la règle stricte.":""} Texte brut, sans markdown, pas d'introduction.`,
       {onText:text=>{ S.planText=text; const o=document.getElementById("plan-out"); if(o){o.hidden=false;o.textContent=text;} }});
   }catch(e){ S.planText=(e&&e.text)||""; S.note=aiErr(e); if(S.note) S.planText=S.note; }
   render();
@@ -883,7 +897,7 @@ async function askPlan(){
 async function askAdvice(){
   const t=totals(), D=day(), R=refs(prof(),compute(prof())); S.advice="Claude réfléchit…"; render();
   const lows=MICROS.flatMap(g=>g[1]).filter(([k])=>R[k][1]==="min"&&(KI[k]!=null||k==="om3")&&val(t,k)<R[k][0]*0.5).map(x=>x[1]).slice(0,6).join(", ");
-  try{ S.advice = await AI.text(`${context()}\n\nDéjà mangé aujourd'hui (${r0(t.kcal)} kcal, P ${r0(t.p)} g, G ${r0(t.c)} g, L ${r0(t.l)} g, fibres ${r0(t.f)} g) : ${D.meals.map(m=>m.name+" "+m.g+" g").join(", ")||"rien"}.${lows?" Micronutriments encore bas aujourd'hui : "+lows+".":""} Il est ${new Date().getHours()} h.\n\nPropose en français, en tutoyant, UNE idée concrète pour le prochain repas (aliments de saison, grammes, kcal et macros approximatives) qui rapproche des cibles restantes et des micronutriments bas, cohérente avec l'ayurveda de la saison. 5 lignes maximum, texte brut sans markdown.`, {quick:true});
+  try{ S.advice = await AI.text(`${context()}\n\nDéjà mangé aujourd'hui (${r0(t.kcal)} kcal, P ${r0(t.p)} g, G ${r0(t.c)} g, L ${r0(t.l)} g, fibres ${r0(t.f)} g) : ${D.meals.map(m=>m.name+" "+m.g+" g").join(", ")||"rien"}.${lows?" Micronutriments encore bas aujourd'hui : "+lows+".":""} Il est ${new Date().getHours()} h.\n\nPropose en français, en tutoyant, UNE idée concrète pour le prochain repas (aliments de saison, grammes, kcal et macros approximatives) qui rapproche des cibles restantes et des micronutriments bas, cohérente avec l'ayurveda de la saison.${pplClause(ppl())}${DIET_RULE[prof().diet]?" Vérifie que chaque aliment respecte la règle stricte.":""} ${ppl()>1?8:5} lignes maximum, texte brut sans markdown.`, {quick:true});
   }catch(e){ S.advice=aiErr(e); }
   render();
 }
@@ -921,6 +935,7 @@ async function offSearch(){
 }
 
 /* ================= Actions ================= */
+const myShare = items => { const n=S.share||1; S.share=1; return n>1 ? items.map(it=>({...it, g:Math.round(it.g/n), n:it.n.map(v=>v==null?null:v/n)})) : items; };
 function addItems(items){ const slot=curSlot(), D=day(); S.fresh=new Set(); for(const it of items){ const id=uid(); S.fresh.add(id); D.meals.push({id, slot, ...it}); } saveDay(); Mic.stop(); }
 document.addEventListener("click", e=>{
   if(e.target.closest("[data-close]")) return closeSheet();
@@ -940,8 +955,10 @@ document.addEventListener("click", e=>{
   if(b.dataset.quiz){ const [i,j]=b.dataset.quiz.split(":").map(Number); const p=S.draftProfile; p.quiz=p.quiz||[]; p.quiz[i]=j; for(let k=0;k<QUIZ.length;k++) if(p.quiz[k]===undefined) p.quiz[k]=null; return render(); }
   const a=b.dataset.act; if(!a) return;
   if(a==="mic") return Mic.toggle();
+  if(a==="people"){ S.people=ppl()%6+1; if(S.profile){ S.profile.people=S.people; store.save("profile",S.profile); } return render(); }
+  if(a==="share"){ S.share=(S.share||1)%6+1; return render(); }
   if(a==="add"){ const t=(S.draft.trim()||S.q.trim()); if(!t){S.note="Écris ou dicte d'abord ce que tu as mangé.";return render();} S.q="";
-    const items=parseText(t); addItems(items); const unk=items.filter(i=>i.unknown).length; S.draft="";
+    const items=myShare(parseText(t)); addItems(items); const unk=items.filter(i=>i.unknown).length; S.draft="";
     S.note=unk? unk+" aliment(s) non reconnu(s), affiché(s) en rouge."+(AI.ok?" Supprime-les et utilise « Estimer avec Claude » pour les plats composés.":" Cherche-les par leur nom dans la table.") : items.length+" aliment(s) ajouté(s)."; S.sheet=null; return render(); }
   if(a==="ia"){ const t=(S.draft.trim()||S.q.trim()); if(!t){S.note="Écris ou dicte d'abord ce que tu as mangé.";return render();} Mic.stop(); return estimate(t); }
   if(a==="photo") return $("#photo").click();
@@ -955,7 +972,7 @@ document.addEventListener("click", e=>{
     day().acts.push({id:uid(), name:ACTS[i][0], min, kcal:(ACTS[i][1]-1)*w*min/60}); saveDay(); S.sheet=null; return render(); }
   if(a==="weight"){ const v=num($("#weight").value); if(!v) return; day().weight=v; saveDay(); S.sheet=null; S.note="Pesée enregistrée."; return render(); }
   if(a==="usereal"){ if(!S.profile) return go("profil"); S.profile.tdeeReal=+b.dataset.v||0; store.save("profile",S.profile); return render(); }
-  if(a==="saveprofile"){ const first=!S.profile, p=S.draftProfile; delete p.example; S.profile=JSON.parse(JSON.stringify(p)); store.save("profile",S.profile); if(first){ S.step=0; return go("plan"); } S.note="Profil enregistré."; return render(); }
+  if(a==="saveprofile"){ const first=!S.profile, p=S.draftProfile; delete p.example; p.people=+p.people||1; S.people=null; S.profile=JSON.parse(JSON.stringify(p)); store.save("profile",S.profile); if(first){ S.step=0; return go("plan"); } S.note="Profil enregistré."; return render(); }
   if(a==="code"){ AI.code=$("#code").value.trim(); store.put("code",AI.code); S.note="Code enregistré."; return render(); }
   if(a==="export"){ const blob=new Blob([JSON.stringify({app:"agni",v:2,profile:S.profile,days:S.days})],{type:"application/json"}); const l=document.createElement("a"); l.href=URL.createObjectURL(blob); l.download="agni-"+today()+".json"; l.click(); return; }
   if(a==="reset"){ S.confirmReset=true; return render(); }
